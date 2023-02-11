@@ -1,1 +1,0 @@
-/usr/bin/cc    CMakeFiles/DSPPSG_test.dir/testfunctions.c.o CMakeFiles/DSPPSG_test.dir/__/src/Signals.c.o  -o DSPPSG_test   -L/usr/local/lib  -L/home/a/git/DSP-Playground/build  -Wl,-rpath,/usr/local/lib:/home/a/git/DSP-Playground/build ../submodules/libunity.a ../libDSPPG.a ../submodules/liblog_c.a 

@@ -1,2 +1,0 @@
-/usr/bin/ar qc libDSPPG.a  CMakeFiles/DSPPG.dir/src/Signals.c.o
-/usr/bin/ranlib libDSPPG.a
