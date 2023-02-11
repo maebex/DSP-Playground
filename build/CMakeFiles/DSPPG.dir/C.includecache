@@ -1,0 +1,38 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+../include/Signals.h
+globals.h
+-
+
+../include/globals.h
+stdio.h
+-
+stdlib.h
+-
+stdint.h
+-
+errno.h
+-
+log.h
+../include/log.h
+
+../submodules/log.c/src/log.h
+stdio.h
+-
+stdarg.h
+-
+stdbool.h
+-
+time.h
+-
+
+/home/a/git/DSP-Playground/src/Signals.c
+Signals.h
+/home/a/git/DSP-Playground/src/Signals.h
+

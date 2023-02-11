@@ -1,0 +1,6 @@
+[submodule "submodules/Unity"]
+	path = submodules/Unity
+	url = git@github.com:ThrowTheSwitch/Unity.git
+[submodule "submodules/log.c"]
+	path = submodules/log.c
+	url = git@github.com:maebex/log.c.git
