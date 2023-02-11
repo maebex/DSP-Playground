@@ -10,8 +10,9 @@
  * 
 */
 typedef struct {
-    size_t len;
-    int32_t *data;
+    size_t len;         // Number of samples in data
+    int32_t *data;      // Sampled data
+    uint32_t smpl_rate  // Sample rate
 }DSPPG_Signal_Int32;
 
 /**
@@ -35,12 +36,16 @@ int DSPPG__Signals__Signal_Int32__Init_empty(DSPPG_Signal_Int32 *sig);
  *         ENOMEM if memory error
  * 
 */
-int DSPPG__Signals__Signal_Int32__Init_prealloc(DSPPG_Signal_Int32 *sig, size_t len, int32_t *data);
+int DSPPG__Signals__Signal_Int32__Init_prealloc(DSPPG_Signal_Int32 *sig, 
+                                                size_t len, 
+                                                int32_t *data);
 
 /**
  * TODO
 */
-int DSPPG__Signals__Signal_Int32__Init_fromFile(DSPPG_Signal_Int32 *sig, size_t len, FILE *f);
+int DSPPG__Signals__Signal_Int32__Init_fromFile(DSPPG_Signal_Int32 *sig, 
+                                                size_t len, 
+                                                FILE *f);
 
 
 
