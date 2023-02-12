@@ -39,7 +39,8 @@ add_subdirectory(src)
 # Unity
 # Cmake and Unity example: https://www.poisel.info/posts/2019-07-15-cmake-unity-integration/
 include(CTest)
-add_subdirectory(test)
+add_subdirectory(test/Signals)
+add_subdirectory(test/Statistics)
 #
 # Setup Memory Checker
 # --> Run MemCheck using: ctest -R <testname> -D ExperimentalMemCheck

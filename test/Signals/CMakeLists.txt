@@ -1,9 +1,9 @@
 
 
 
-set(TEST_NAME DSPPSG_test)
+set(TEST_NAME DSPPSG_Signals_Test)
 add_executable (${TEST_NAME}
-                testfunctions.c
+                Test_Signals.c
                 ) 
 
 target_include_directories(${TEST_NAME}
