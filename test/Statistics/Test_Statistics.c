@@ -7,16 +7,28 @@
 
 #define TEST_ARRAY_LENGTH 5
 
-DSPPG_DigSignal_t *sigStump;
+DSPPG_DigSignal_t sigStump_fourVals;
+DSPPG_DigSignal_t sigStump_fiveVals;
+DSPPG_StatCont_t contStump_fourVals;
+DSPPG_StatCont_t contStump_fiveVals;
 int32_t TEST_ARR[TEST_ARRAY_LENGTH] = {432519, 35893, -305, 234535, -359048};
 #define MEAN__FIRST_FOUR_NUMS ((double)175660.5)
 #define MEAN__FIRST_FIVE_NUMS ((double)68718.8)
- 
+
 
 void setUp(void) 
 {
     // Generate sigStump
-    sigStump = NULL;
+    sigStump_fourVals.len = 4;
+    sigStump_fourVals.data = TEST_ARR;
+    contStump_fourVals.signal = &sigStump_fourVals;
+    contStump_fourVals.mean = MEAN__FIRST_FOUR_NUMS;
+
+    sigStump_fiveVals.len = 5;
+    sigStump_fiveVals.data = TEST_ARR;
+    contStump_fiveVals.signal = &sigStump_fiveVals;
+    contStump_fiveVals.mean = MEAN__FIRST_FIVE_NUMS;
+
 }
 
 void tearDown(void) 
@@ -52,7 +64,6 @@ void test__DSPPG__Statistics__StatCont__updateMean(void)
         TEST_FAIL();
     }
 
-    DSPPG_StatCont_t *contStump = NULL;
     err = DSPPG__Statistics__StatCont__Init(&contStump, sigStump);
 
     err = DSPPG__Statistics__StatCont__calcMean(contStump);

@@ -6,7 +6,7 @@ project( DSPPG
          VERSION 0.0.1            
 )
 
-#set(CMAKE_VERBOSE_MAKEFILE TRUE)
+# set(CMAKE_VERBOSE_MAKEFILE TRUE)
 
 add_library(${CMAKE_PROJECT_NAME} "")
 
