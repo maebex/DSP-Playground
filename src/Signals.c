@@ -1,44 +1,33 @@
 
 #include "Signals.h"
 
-int DSPPG__Signals__DigSignal__Init_empty(DSPPG_DigSignal_t **sig)
-{
-    *sig = calloc(1, sizeof(DSPPG_DigSignal_t));
-    if(!(*sig)){
-        int err = ENOMEM;
-        log_error("%s %d", __FUNCTION__, err);
-        return err;
-    }
-    return 0;
-}
 
-int DSPPG__Signals__DigSignal__Init_prealloc(DSPPG_DigSignal_t **sig, 
-                                             size_t len,
-                                             payloadType_t *data)
+int DSPPG__Signals__DigSignal__setData(DSPPG_DigSignal_t *sig, 
+                                       size_t len,
+                                       payloadType_t *data)
 {
-    if(!data){
+    if(!sig){
         int err = EFAULT;
-        log_error("%s %d", __FUNCTION__, EFAULT);
-        return err;
-    }
-    (*sig) = calloc(1, sizeof(DSPPG_DigSignal_t));
-    if(!(*sig)){
-        int err = ENOMEM;
         log_error("%s %d", __FUNCTION__, err);
         return err;
     }
-    (*sig)->len = len;
-    (*sig)->data = data;
+    if(!data){
+        sig->len = 0;
+        sig->data = NULL;
+    }else{
+        sig->len = len;
+        sig->data = data;
+    }
     return 0;
 }
 
-int DSPPG__Signals__DigSignal__destroy(DSPPG_DigSignal_t **cont)
+
+
+int DSPPG__Signals__DigSignal__convolute(DSPPG_DigSignal_t *res,
+                                         DSPPG_DigSignal_t *signal,
+                                         DSPPG_DigSignal_t *filter)
 {
-    if(*cont){
-        free(*cont);
-        *cont = NULL;
-        return 0;
-    }else{
-        return EFAULT;
-    }
+
+
+    return 0;
 }

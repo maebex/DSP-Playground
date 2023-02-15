@@ -1,5 +1,7 @@
 {
     "files.associations": {
-        "signals.h": "c"
+        "signals.h": "c",
+        "helpers.h": "c",
+        "globals.h": "c"
     }
 }

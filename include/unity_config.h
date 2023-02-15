@@ -176,7 +176,7 @@
  * Example:
  */
 /* #define UNITY_FLOAT_PRECISION 0.001f  */
-/* #define UNITY_DOUBLE_PRECISION 0.001f */
+#define UNITY_DOUBLE_PRECISION 0.00001f
 
 
 /* *************************** MISCELLANEOUS ***********************************
