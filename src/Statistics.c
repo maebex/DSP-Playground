@@ -17,13 +17,13 @@ int DSPPG__Statistics__StatCont__calcMean(DSPPG_StatCont_t *cont)
 {
     if(!cont){
         int err = EFAULT;
-        log_error("%s %d", __FUNCTION__, EFAULT);
+        log_error("%s %d", __FUNCTION__, err);
         return err;
     }
 
     if(0 == cont->signal->len){
         int err = EFAULT;
-        log_error("%s %d", __FUNCTION__, EFAULT);
+        log_error("%s %d", __FUNCTION__, err);
         return err;
     }
 
@@ -42,13 +42,13 @@ int DSPPG__Statistics__StatCont__updateMean(DSPPG_StatCont_t *cont,
 {
     if(!cont){
         int err = EFAULT;
-        log_error("%s %d", __FUNCTION__, EFAULT);
+        log_error("%s %d", __FUNCTION__, err);
         return err;
     }
 
     cont->mean *= cont->signal->len;
 
-    payloadType_t tmp = 0;
+    DSPPG_DigSignal_payloadType_t tmp = 0;
     for(int i=cont->signal->len; i<(cont->signal->len+n); i++){
         tmp += cont->signal->data[i];
     }
@@ -64,7 +64,7 @@ int DSPPG__Statistics__StatCont__calcStd(DSPPG_StatCont_t *cont)
     double subtrahend;
     if(0==cont->signal->len){
         int err = EFAULT;
-        log_error("%s %d", __FUNCTION__, EFAULT);
+        log_error("%s %d", __FUNCTION__, err);
         return err;
     }
     cont->std._sumSq = 0.;
@@ -87,7 +87,7 @@ int DSPPG__Statistics__StatCont__updateStd(DSPPG_StatCont_t *cont,
     double subtrahend;
     if(0==cont->signal->len){
         int err = EFAULT;
-        log_error("%s %d", __FUNCTION__, EFAULT);
+        log_error("%s %d", __FUNCTION__, err);
         return err;
     }
     if(0==n){

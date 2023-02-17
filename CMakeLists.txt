@@ -1,12 +1,14 @@
 
 cmake_minimum_required (VERSION 3.16)
 
+
 project( DSPPG
          DESCRIPTION "Just playing around with Digital Signal Processing"
          VERSION 0.0.1            
 )
 
 # set(CMAKE_VERBOSE_MAKEFILE TRUE)
+set(CMAKE_BUILD_TYPE Debug)
 
 add_library(${CMAKE_PROJECT_NAME} "")
 

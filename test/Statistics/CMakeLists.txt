@@ -1,5 +1,4 @@
 
-
 set(TEST_NAME DSPPSG_Statistics_Test)
 add_executable (${TEST_NAME}
                 Test_Statistics.c
