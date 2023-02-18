@@ -11,7 +11,6 @@
 #include <math.h>
 
 #include "log.h"
-#include "Helpers.h"
 
 
 /* Use unity_config.h for configuration */

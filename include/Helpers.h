@@ -1,7 +1,20 @@
 #ifndef A223A8BD_7F08_431C_883A_7356FF93A292
 #define A223A8BD_7F08_431C_883A_7356FF93A292
 
-#include "globals.h"
+#include "Globals.h"
+
+/* Flag to ensure that rands() is only called once */
+extern unsigned int DSPPG__SRAND_INITIALIZED;
+
+/**
+ * @brief Generate a random double between 0.0 and max
+ * 
+ * @param[in] max uppe rlimit
+ * 
+ * @return random number
+ * 
+*/
+double DSPPG__Helpers__genRand(double max);
 
 
 #endif /* A223A8BD_7F08_431C_883A_7356FF93A292 */

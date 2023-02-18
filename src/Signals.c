@@ -33,7 +33,8 @@ int DSPPG__Signals__DigSignal__convoluteIn(DSPPG_DigSignal_t *out,
         log_error("%s %d", __FUNCTION__, err);
         return err;
     }
-    unsigned int lenOut = in->len + filter->len - 1; // length of the output signal = length of the input signal + length of filter - 1
+    // length of the output signal = length of the input signal + length of filter - 1
+    unsigned int lenOut = in->len + filter->len - 1; 
     out->data = calloc(lenOut, sizeof *(out->data));
     out->len = lenOut;
     if(!out->data){
@@ -62,7 +63,8 @@ int DSPPG__Signals__DigSignal__convoluteOut(DSPPG_DigSignal_t *out,
         log_error("%s %d", __FUNCTION__, err);
         return err;
     }
-    unsigned int lenOut = in->len + filter->len - 1; // length of the output signal = length of the input signal + length of filter - 1
+    // length of the output signal = length of the input signal + length of filter - 1
+    unsigned int lenOut = in->len + filter->len - 1; 
     out->data = calloc(lenOut, sizeof *(out->data));
     out->len = lenOut;
     if(!out->data){
@@ -93,7 +95,8 @@ int DSPPG__Signals__DigSignal__correlate(DSPPG_DigSignal_t *out,
         log_error("%s %d", __FUNCTION__, err);
         return err;
     }
-    unsigned int lenOut = in->len + filter->len; // length of the output signal = length of the input signal + length of filter
+    // length of the output signal = length of the input signal + length of filter
+    unsigned int lenOut = in->len + filter->len; 
     out->data = calloc(lenOut, sizeof *(out->data));
     out->len = lenOut;
     if(!out->data){
@@ -120,13 +123,20 @@ void DSPPG__Signals__DigSignal__destroy(DSPPG_DigSignal_t *sig)
     }
 }
 
+
+
 int DSPPG__Signals__DigSignal__generateNoise(DSPPG_DigSignal_t *out,
-                                                  uint32_t mean, 
-                                                  double_t sigma,
-                                                  size_t len)
+                                             double_t mean, 
+                                             double_t std,
+                                             size_t len)
 {
-    int err;
-    if(!out || 0 == len){
+    int err = 0;
+    // Number of values added, has to be even - increase for better distribution resolution
+    unsigned int num_iters = 12;  
+    if(num_iters%2){
+        num_iters++;
+    }
+    if(!out || 0 == len || 0 > std){
         err = EFAULT;
         log_error("%s %d", __FUNCTION__, err);
         return err;
@@ -139,10 +149,37 @@ int DSPPG__Signals__DigSignal__generateNoise(DSPPG_DigSignal_t *out,
         return err;
     }
     out->len = len;
-    for(int i=0; i<len; i++){
-        
+    for(int i=0; i<len; i++){  // samples
+        for (int j=0; j<num_iters; j++){
+            out->data[i] += DSPPG__Helpers__genRand(1.0);
+
+        }
+        out->data[i] -= (num_iters>>1);
+        out->data[i] *= std;
+        out->data[i] += mean;
     }
 
     return err;
 }
+
+
+
+
+void DSPPG__Signals__DigSignal__plotData(DSPPG_DigSignal_t *sig,
+                                         const char *fpath)
+{
+    FILE *gnuplot = popen("gnuplot", "w");
+    fprintf(gnuplot, "set terminal png size 1200,900;");
+    fprintf(gnuplot, "set output '%s';", fpath);
+    fprintf(gnuplot, "plot '-'\n");
+    for (int i = 0; i < sig->len; i++)
+        fprintf(gnuplot, "%d %lf\n", i, sig->data[i]);
+    fprintf(gnuplot, "e\n");
+    fflush(gnuplot);
+
+}
+
+
+
+
 

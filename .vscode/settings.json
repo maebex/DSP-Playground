@@ -2,11 +2,12 @@
     "files.associations": {
         "signals.h": "c",
         "helpers.h": "c",
-        "globals.h": "c"
+        "globals.h": "c",
+        "unity.h": "c"
     },
     "cmake.ctestArgs": [
-           "--verbose",
-           "-D", "ExperimentalMemCheck"
+        //    "--verbose",
+        //    "-D", "ExperimentalMemCheck"
        ],
 }
 

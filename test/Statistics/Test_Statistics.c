@@ -1,6 +1,6 @@
 
 
-#include "globals.h"
+#include "Globals.h"
 #include "unity.h"
 #include "Statistics.h"
 
@@ -11,7 +11,7 @@ DSPPG_DigSignal_t sigStump_fourVals;
 DSPPG_DigSignal_t sigStump_fiveVals;
 DSPPG_StatCont_t contStump_fourVals;
 DSPPG_StatCont_t contStump_fiveVals;
-int32_t TEST_ARR[TEST_ARRAY_LENGTH] = {432519, 35893, -305, 234535, -359048};
+double_t TEST_ARR[TEST_ARRAY_LENGTH] = {432519., 35893., -305., 234535., -359048.};
 #define MEAN__FIRST_FOUR_NUMS ((double)175660.5)
 #define MEAN__FIRST_FIVE_NUMS ((double)68718.8)
 #define STDDEV__FIRST_FOUR_NUMS ((double)199951.0832)
@@ -48,14 +48,10 @@ void test__DSPPG__Statistics__StatCont__calcMean(void)
     DSPPG_StatCont_t contStump;
     memset(&contStump, 0, sizeof contStump);
     err = DSPPG__Statistics__StatCont__setSignal(&contStump, &sigStump_fiveVals);
-    if(err){
-        TEST_FAIL();
-    }
+    TEST_ASSERT_EQUAL_INT(0, err);
 
     err = DSPPG__Statistics__StatCont__calcMean(&contStump);
-    if(err){
-        TEST_FAIL();
-    }
+    TEST_ASSERT_EQUAL_INT(0, err);
     TEST_ASSERT_EQUAL_DOUBLE(MEAN__FIRST_FIVE_NUMS, contStump.mean);
 
 }
@@ -67,20 +63,14 @@ void test__DSPPG__Statistics__StatCont__updateMean(void)
     DSPPG_StatCont_t contStump;
     memset(&contStump, 0, sizeof contStump);
     err = DSPPG__Statistics__StatCont__setSignal(&contStump, &sigStump_fourVals);
-    if(err){
-        TEST_FAIL();
-    }
+    TEST_ASSERT_EQUAL_INT(0, err);
 
     err = DSPPG__Statistics__StatCont__calcMean(&contStump);
-    if(err){
-        TEST_FAIL();
-    }
+    TEST_ASSERT_EQUAL_INT(0, err);
 
     TEST_ASSERT_EQUAL_DOUBLE(MEAN__FIRST_FOUR_NUMS, contStump.mean);
     err = DSPPG__Statistics__StatCont__updateMean(&contStump, 1);
-    if(err){
-        TEST_FAIL();
-    }
+    TEST_ASSERT_EQUAL_INT(0, err);
     TEST_ASSERT_EQUAL_DOUBLE(MEAN__FIRST_FIVE_NUMS, contStump.mean);
 
 }
@@ -94,9 +84,7 @@ void test__DSPPG__Statistics__StatCont__calcStd(void)
     err = DSPPG__Statistics__StatCont__setSignal(&contStump, &sigStump_fourVals);
 
     err = DSPPG__Statistics__StatCont__calcStd(&contStump);
-    if(err){
-        TEST_FAIL();
-    }
+    TEST_ASSERT_EQUAL_INT(0, err);
     TEST_ASSERT_EQUAL_DOUBLE(STDDEV__FIRST_FOUR_NUMS, contStump.std.std);
 
 
@@ -111,15 +99,11 @@ void test__DSPPG__Statistics__StatCont__updateStd(void)
     err = DSPPG__Statistics__StatCont__setSignal(&contStump, &sigStump_fourVals);
 
     err = DSPPG__Statistics__StatCont__calcStd(&contStump);
-    if(err){
-        TEST_FAIL();
-    }
+    TEST_ASSERT_EQUAL_INT(0, err);
 
     err = DSPPG__Statistics__StatCont__setSignal(&contStump, &sigStump_fiveVals);
     err = DSPPG__Statistics__StatCont__updateStd(&contStump, 1);
-    if(err){
-        TEST_FAIL();
-    }
+    TEST_ASSERT_EQUAL_INT(0, err);
     TEST_ASSERT_EQUAL_DOUBLE(STDDEV__FIRST_FIVE_NUMS, contStump.std.std);
 
 }

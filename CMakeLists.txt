@@ -1,6 +1,9 @@
 
-cmake_minimum_required (VERSION 3.16)
+if(NOT UNIX)
+    message(FATAL_ERROR "Not a unix system.")
+endif()
 
+cmake_minimum_required (VERSION 3.16)
 
 project( DSPPG
          DESCRIPTION "Just playing around with Digital Signal Processing"
@@ -16,6 +19,21 @@ add_subdirectory(submodules)
 
 target_link_libraries(${CMAKE_PROJECT_NAME} PUBLIC m)
 
+
+#-------------------------------------------------
+# GNUPLOT
+#-------------------------------------------------
+# Check if Gnuplot is installed
+# execute_process(COMMAND "which gnuplot" RESULT_VARIABLE GNUPLOT_PATH)
+set(PROGRAM_NOT_FOUND_POSTFIX "-NOTFOUND")
+find_program(GNUPLOT_INSTALL_PATH gnuplot)
+if(NOT "${GNUPLOT_INSTALL_PATH}" STREQUAL "GNUPLOT_INSTALL_PATH${PROGRAM_NOT_FOUND_POSTFIX}")
+  add_compile_definitions(GNUPLOT_IS_INSTALLED)
+else()
+  message(STATUS "GNUplot not installed. Plotting is disabled.")
+endif()
+
+
 #-------------------------------------------------
 # LOGGING
 #-------------------------------------------------
@@ -26,14 +44,12 @@ target_link_directories(${CMAKE_PROJECT_NAME} PRIVATE build/submodules)
 target_link_libraries(${CMAKE_PROJECT_NAME} PRIVATE log_c)
 
 
-
 #-------------------------------------------------
 # OWN CODE
 #-------------------------------------------------
 #
 target_include_directories(${CMAKE_PROJECT_NAME} PRIVATE include)
 add_subdirectory(src)
-
 
 
 #-------------------------------------------------

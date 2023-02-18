@@ -2,12 +2,12 @@
 
 
 
-double_t DSPPG__Helpers__genRand(double_t max)
+double DSPPG__Helpers__genRand(double max)
 {
-    static int srand_initialized = 0;
-    if(!srand_initialized){
+    static unsigned int DSPPG__SRAND_INITIALIZED = 0;
+    if(!DSPPG__SRAND_INITIALIZED){
         srand((unsigned int)time(NULL));
-        srand_initialized = 1;
+        DSPPG__SRAND_INITIALIZED = 1;
     }
     return (double)rand()/(double)(RAND_MAX/max);
 }

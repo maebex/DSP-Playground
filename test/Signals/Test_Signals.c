@@ -1,6 +1,9 @@
-#include "globals.h"
+#include "Globals.h"
 #include "unity.h"
 #include "Signals.h"
+#include "Statistics.h"
+
+#define TEST_PLOTTING
 
 void setUp(void) 
 {
@@ -70,27 +73,56 @@ void test__DSPPG__Signals__DigSignal__convolute_Random(void)
     memset(&out, 0, sizeof out);
     err = DSPPG__Signals__DigSignal__convoluteIn(&out, &in, &filter);
     TEST_ASSERT_EQUAL_INT(0, err);
-    TEST_ASSERT_EQUAL_INT_ARRAY(result.data, out.data, RESULT_SIZE);
+    TEST_ASSERT_EQUAL_DOUBLE_ARRAY(result.data, out.data, RESULT_SIZE);
     DSPPG__Signals__DigSignal__destroy(&out);
 
     // Convolution - Outside algorithm
     memset(&out, 0, sizeof out);
     err = DSPPG__Signals__DigSignal__convoluteOut(&out, &in, &filter);
     TEST_ASSERT_EQUAL_INT(0, err);
-    TEST_ASSERT_EQUAL_INT_ARRAY(result.data, out.data, RESULT_SIZE);
+    TEST_ASSERT_EQUAL_DOUBLE_ARRAY(result.data, out.data, RESULT_SIZE);
     DSPPG__Signals__DigSignal__destroy(&out);
 
-
-
 }
-
-
-
 
 
 void test__DSPPG__Signals__DigSignal__convoluteIn_Zero(void)
 {
     int err;
+
+    // TODO
+
+}
+
+
+void test__DSPPG__Signals__DigSignal__generateNoise(void)
+{
+    int err;
+    double_t mean;
+    double_t std;
+    size_t numSamps;
+    DSPPG_StatCont_t cont;
+    DSPPG_DigSignal_t noise;
+
+    /* Test 1 */
+    mean = 350.;
+    std = 1.5;
+    numSamps = 100000;
+    err = DSPPG__Signals__DigSignal__generateNoise(&noise, mean, std, numSamps);
+    TEST_ASSERT_EQUAL_INT(0, err);
+    err = DSPPG__Statistics__StatCont__setSignal(&cont, &noise);
+    TEST_ASSERT_EQUAL_INT(0, err);
+    err = DSPPG__Statistics__StatCont__calcMean(&cont);
+    TEST_ASSERT_EQUAL_INT(0, err);
+    err = DSPPG__Statistics__StatCont__calcStd(&cont);
+    TEST_ASSERT_EQUAL_INT(0, err);
+    TEST_ASSERT_DOUBLE_WITHIN(0.01, mean, cont.mean);
+    TEST_ASSERT_DOUBLE_WITHIN(0.01, std, cont.std.std);
+    #ifdef TEST_PLOTTING
+    char *path = "testnoise.png";
+    DSPPG__Signals__DigSignal__plotData(cont.signal, path);
+    #endif /* TEST_PLOTTING */
+    DSPPG__Signals__DigSignal__destroy(cont.signal);
 
 
 
@@ -107,7 +139,7 @@ int main(void)
     RUN_TEST(test__DSPPG__Signals__DigSignal__setData);
     RUN_TEST(test__DSPPG__Signals__DigSignal__convolute_Random);  // some random values
     // RUN_TEST(test__DSPPG__Signals__DigSignal__convoluteIn_Zero);  // zero input
-
+    RUN_TEST(test__DSPPG__Signals__DigSignal__generateNoise);
 
     return UNITY_END();
 }
