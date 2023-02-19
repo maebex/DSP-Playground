@@ -11,6 +11,7 @@ project( DSPPG
 )
 
 # set(CMAKE_VERBOSE_MAKEFILE TRUE)
+
 set(CMAKE_BUILD_TYPE Debug)
 
 add_library(${CMAKE_PROJECT_NAME} "")
@@ -21,16 +22,17 @@ target_link_libraries(${CMAKE_PROJECT_NAME} PUBLIC m)
 
 
 #-------------------------------------------------
-# GNUPLOT
+# Plotting
 #-------------------------------------------------
+#
+# GNUplot
 # Check if Gnuplot is installed
-# execute_process(COMMAND "which gnuplot" RESULT_VARIABLE GNUPLOT_PATH)
 set(PROGRAM_NOT_FOUND_POSTFIX "-NOTFOUND")
 find_program(GNUPLOT_INSTALL_PATH gnuplot)
 if(NOT "${GNUPLOT_INSTALL_PATH}" STREQUAL "GNUPLOT_INSTALL_PATH${PROGRAM_NOT_FOUND_POSTFIX}")
   add_compile_definitions(GNUPLOT_IS_INSTALLED)
 else()
-  message(STATUS "GNUplot not installed. Plotting is disabled.")
+  message(WARNING "GNUplot not installed. Plotting is disabled.")
 endif()
 
 

@@ -4,6 +4,11 @@
 #include "Globals.h"
 #include "Helpers.h"
 
+#ifdef GNUPLOT_IS_INSTALLED
+#include <search.h>
+#endif /* GNUPLOT_IS_INSTALLED */
+
+
 typedef double_t DSPPG_DigSignal_payloadType_t;
 
 
@@ -121,10 +126,27 @@ int DSPPG__Signals__DigSignal__generateNoise(DSPPG_DigSignal_t *out,
 
 #ifdef GNUPLOT_IS_INSTALLED
 
-
+/**
+ * @brief Show the data as a scatter plot
+ * 
+ * @param[in] sig pointer to signal that is to be plotted
+ * @param[in] fpath, path and filename where it should be stored
+ * 
+*/
 void DSPPG__Signals__DigSignal__plotData(DSPPG_DigSignal_t *sig,
-                                         const char *fpath);
+                                         const char * const fpath);
 
+/**
+ * @brief Show the data as a histogram
+ * 
+ * @param[in] sig pointer to signal that is to be plotted
+ * @param[in] pngpath Path where png is to be stores
+ * @param[in] datpath Path where data file is top be stored
+ * 
+*/
+void DSPPG__Signals__DigSignal__plotHist(DSPPG_DigSignal_t *sig,
+                                         const char * const pngpath,
+                                         const char * const datpath);
 
 #endif /* GNUPLOT_IS_INSTALLED */
 

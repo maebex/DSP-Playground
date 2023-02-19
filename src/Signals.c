@@ -176,10 +176,120 @@ void DSPPG__Signals__DigSignal__plotData(DSPPG_DigSignal_t *sig,
         fprintf(gnuplot, "%d %lf\n", i, sig->data[i]);
     fprintf(gnuplot, "e\n");
     fflush(gnuplot);
-
+    int err = fclose(gnuplot);
 }
 
 
+
+void DSPPG__Signals__DigSignal__plotHist(DSPPG_DigSignal_t *sig,
+                                         const char * const pngpath,
+                                         const char * const datpath)
+{
+    int err = 0;
+    
+    /* Find min and max value - so we know how many classes we need */
+    double_t min, max;
+    unsigned int idx = 1;
+    while(sig->data[0] == sig->data[idx]){
+        idx++;
+    }
+    if(sig->data[0] < sig->data[idx]){
+        min = sig->data[0];
+        max = sig->data[idx];
+    }else{
+        min = sig->data[idx];
+        max = sig->data[0];
+    }
+    idx++;
+    for(;idx<sig->len; idx++){
+        if(sig->data[idx] > max){
+            max = sig->data[idx];
+        }else if(sig->data[idx] < min){
+            min = sig->data[idx];
+        }
+    }
+    min = floor(min);
+    max = ceil(max);
+    const unsigned int maxnumEntries = max-min+1;
+
+    /* Make hash table for the bars */
+    ENTRY e, *ep;
+    hcreate(maxnumEntries);
+   for (int i = 0; i < sig->len; i++) {
+        const unsigned int MAX_STRINGLENGTH = 100;
+        char _tmpKeyStr[MAX_STRINGLENGTH];
+        memset(_tmpKeyStr, 0, MAX_STRINGLENGTH);
+        snprintf(_tmpKeyStr, MAX_STRINGLENGTH-1, "%d", (int)(floor(sig->data[i])));
+        e.key = _tmpKeyStr;
+
+        // Check if already there
+        ep = hsearch(e, FIND);
+        if (NULL == ep){
+            ep = hsearch(e, ENTER);
+            ep->data = (void*) 1;
+        }else{
+            ep->data++;
+        }
+
+        if (ep == NULL) {
+            exit(EXIT_FAILURE);
+        }
+    }
+
+    /* Fill temporary file with the data */
+    const char * const _tmpfname = datpath;
+    FILE *_tmpf = fopen(_tmpfname, "w+");
+    if(!_tmpf){
+        exit(EXIT_FAILURE);
+    }
+    int _tmpMin = min;
+    for (int i = 0; i < sig->len; i++) {
+
+        const unsigned int MAX_STRINGLENGTH = 100;
+        char _tmpKeyStr[MAX_STRINGLENGTH];
+        memset(_tmpKeyStr, 0, MAX_STRINGLENGTH);
+        snprintf(_tmpKeyStr, MAX_STRINGLENGTH-1, "%d", _tmpMin);
+        e.key = _tmpKeyStr;
+
+        ep = hsearch(e, FIND);
+        if(ep){
+            int bla = (long)ep->data;
+            err = fprintf(_tmpf, "%d %d %ld\n", i, _tmpMin, (long)ep->data);
+        }
+        _tmpMin++;
+    }
+    fflush(_tmpf);
+
+/*
+Strangely if we use these commands in gnuplot CLI it works:
+
+reset 
+set output '/mnt/c/Users/mbern/Desktop/gplot/hist.png'
+set boxwidth 1.0
+set style fill solid
+set terminal png size 1200,800
+set xlabel 'Value'
+set ylabel 'Occurences'
+plot '/mnt/c/Users/mbern/Desktop/gplot/data.dat' using 2:3 with boxes title "data"
+*/
+
+    /* Print plot */
+    FILE *gnuplot = popen("gnuplot", "w");
+    fprintf(gnuplot, "set output '%s';", pngpath);
+    fprintf(gnuplot, "set boxwidth 1.0;");
+    fprintf(gnuplot, "set style fill solid;");
+    fprintf(gnuplot, "set xlabel 'Value'");
+    fprintf(gnuplot, "set ylabel 'Occurences'");
+    fprintf(gnuplot, "set terminal png size 1200,900;");
+    fprintf(gnuplot, "plot '%s' using 2:3 with boxes",  _tmpfname);
+    fflush(gnuplot);
+
+    /* Clean up */
+    err = fclose(_tmpf);
+    err = fclose(gnuplot);
+    hdestroy();
+
+}
 
 
 

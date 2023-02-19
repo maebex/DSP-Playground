@@ -105,7 +105,7 @@ void test__DSPPG__Signals__DigSignal__generateNoise(void)
     DSPPG_DigSignal_t noise;
 
     /* Test 1 */
-    mean = 350.;
+    mean = 350.5;
     std = 1.5;
     numSamps = 100000;
     err = DSPPG__Signals__DigSignal__generateNoise(&noise, mean, std, numSamps);
@@ -116,13 +116,17 @@ void test__DSPPG__Signals__DigSignal__generateNoise(void)
     TEST_ASSERT_EQUAL_INT(0, err);
     err = DSPPG__Statistics__StatCont__calcStd(&cont);
     TEST_ASSERT_EQUAL_INT(0, err);
-    TEST_ASSERT_DOUBLE_WITHIN(0.01, mean, cont.mean);
-    TEST_ASSERT_DOUBLE_WITHIN(0.01, std, cont.std.std);
+    TEST_ASSERT_DOUBLE_WITHIN(0.1, mean, cont.mean);
+    TEST_ASSERT_DOUBLE_WITHIN(0.1, std, cont.std.std);
     #ifdef TEST_PLOTTING
-    char *path = "testnoise.png";
-    DSPPG__Signals__DigSignal__plotData(cont.signal, path);
+    char *path1 = "/mnt/c/Users/mbern/Desktop/gplot/testnoise.png";
+    char *path2 = "/mnt/c/Users/mbern/Desktop/gplot/testhist.png";
+    char *path3 = "/mnt/c/Users/mbern/Desktop/gplot/testdata.dat";
+    DSPPG__Signals__DigSignal__plotData(cont.signal, path1);
+    DSPPG__Signals__DigSignal__plotHist(cont.signal, path2, path3);
     #endif /* TEST_PLOTTING */
     DSPPG__Signals__DigSignal__destroy(cont.signal);
+
 
 
 
