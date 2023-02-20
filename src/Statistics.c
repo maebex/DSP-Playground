@@ -2,7 +2,7 @@
 #include <math.h>
 
 int DSPPG__Statistics__StatCont__setSignal(DSPPG_StatCont_t *cont,
-                                           DSPPG_DigSignal_t * const sig)
+                                           DSPPG_DigSignal_TD_t * const sig)
 {
     if(!cont){
         int err = EFAULT;

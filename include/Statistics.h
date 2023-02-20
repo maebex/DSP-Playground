@@ -11,7 +11,7 @@
  * 
 */
 typedef struct {
-    DSPPG_DigSignal_t *signal;          // Signal
+    DSPPG_DigSignal_TD_t *signal;          // Signal
     double mean;                        // Mean
     struct {
         double std;     // Standard Deviation
@@ -23,7 +23,7 @@ typedef struct {
 
 // Init
 /**
- * @brief Initialize a Statistic Container structure with an already initialized signal of type DSPPG_DigSignal_t
+ * @brief Initialize a Statistic Container structure with an already initialized signal of type DSPPG_DigSignal_TD_t
  *
  * @param[out, out] cont pointer to container that is to be initialized
  * @param[in] sig pointer to signal
@@ -35,7 +35,7 @@ typedef struct {
  *  
 */
 int DSPPG__Statistics__StatCont__setSignal(DSPPG_StatCont_t *cont,
-                                           DSPPG_DigSignal_t * const sig);
+                                           DSPPG_DigSignal_TD_t * const sig);
 
 
 // Mean

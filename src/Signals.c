@@ -2,7 +2,7 @@
 #include "Signals.h"
 
 
-int DSPPG__Signals__DigSignal__setData(DSPPG_DigSignal_t *sig, 
+int DSPPG__Signals__DigSignal__setData(DSPPG_DigSignal_TD_t *sig, 
                                        size_t len,
                                        DSPPG_DigSignal_payloadType_t *data)
 {
@@ -23,9 +23,9 @@ int DSPPG__Signals__DigSignal__setData(DSPPG_DigSignal_t *sig,
 
 
 
-int DSPPG__Signals__DigSignal__convoluteIn(DSPPG_DigSignal_t *out,
-                                           DSPPG_DigSignal_t *in,
-                                           DSPPG_DigSignal_t *filter)
+int DSPPG__Signals__DigSignal__convoluteIn(DSPPG_DigSignal_TD_t *out,
+                                           DSPPG_DigSignal_TD_t *in,
+                                           DSPPG_DigSignal_TD_t *filter)
 {
     int err;
     if(!in || !out || !in->data || !filter->data || 0 == in->len || 0 == filter->len){
@@ -53,9 +53,9 @@ int DSPPG__Signals__DigSignal__convoluteIn(DSPPG_DigSignal_t *out,
 }
 
 
-int DSPPG__Signals__DigSignal__convoluteOut(DSPPG_DigSignal_t *out,
-                                            DSPPG_DigSignal_t *in,
-                                            DSPPG_DigSignal_t *filter)
+int DSPPG__Signals__DigSignal__convoluteOut(DSPPG_DigSignal_TD_t *out,
+                                            DSPPG_DigSignal_TD_t *in,
+                                            DSPPG_DigSignal_TD_t *filter)
 {
     int err;
     if(!in || !out || !in->data || !filter->data || 0 == in->len || 0 == filter->len){
@@ -85,9 +85,9 @@ int DSPPG__Signals__DigSignal__convoluteOut(DSPPG_DigSignal_t *out,
     return 0;
 }
 
-int DSPPG__Signals__DigSignal__correlate(DSPPG_DigSignal_t *out,
-                                         DSPPG_DigSignal_t *in,
-                                         DSPPG_DigSignal_t *filter)
+int DSPPG__Signals__DigSignal__correlate(DSPPG_DigSignal_TD_t *out,
+                                         DSPPG_DigSignal_TD_t *in,
+                                         DSPPG_DigSignal_TD_t *filter)
 {
     int err;
     if(!in || !out || !in->data || !filter->data || 0 == in->len || 0 == filter->len){
@@ -115,7 +115,7 @@ int DSPPG__Signals__DigSignal__correlate(DSPPG_DigSignal_t *out,
 }
 
 
-void DSPPG__Signals__DigSignal__destroy(DSPPG_DigSignal_t *sig)
+void DSPPG__Signals__DigSignal__destroy(DSPPG_DigSignal_TD_t *sig)
 {
     if(sig->data){
         free(sig->data);
@@ -125,7 +125,7 @@ void DSPPG__Signals__DigSignal__destroy(DSPPG_DigSignal_t *sig)
 
 
 
-int DSPPG__Signals__DigSignal__generateNoise(DSPPG_DigSignal_t *out,
+int DSPPG__Signals__DigSignal__generateNoise(DSPPG_DigSignal_TD_t *out,
                                              double_t mean, 
                                              double_t std,
                                              size_t len)
@@ -163,9 +163,10 @@ int DSPPG__Signals__DigSignal__generateNoise(DSPPG_DigSignal_t *out,
 }
 
 
+#ifdef GNUPLOT_IS_INSTALLED
 
 
-void DSPPG__Signals__DigSignal__plotData(DSPPG_DigSignal_t *sig,
+void DSPPG__Signals__DigSignal__plotData(DSPPG_DigSignal_TD_t *sig,
                                          const char *fpath)
 {
     FILE *gnuplot = popen("gnuplot", "w");
@@ -181,7 +182,7 @@ void DSPPG__Signals__DigSignal__plotData(DSPPG_DigSignal_t *sig,
 
 
 
-void DSPPG__Signals__DigSignal__plotHist(DSPPG_DigSignal_t *sig,
+void DSPPG__Signals__DigSignal__plotHist(DSPPG_DigSignal_TD_t *sig,
                                          const char * const pngpath,
                                          const char * const datpath)
 {
@@ -275,13 +276,13 @@ plot '/mnt/c/Users/mbern/Desktop/gplot/data.dat' using 2:3 with boxes title "dat
 
     /* Print plot */
     FILE *gnuplot = popen("gnuplot", "w");
-    fprintf(gnuplot, "set output '%s';", pngpath);
+    fprintf(gnuplot, "set output \"%s\";", pngpath);
     fprintf(gnuplot, "set boxwidth 1.0;");
     fprintf(gnuplot, "set style fill solid;");
-    fprintf(gnuplot, "set xlabel 'Value'");
-    fprintf(gnuplot, "set ylabel 'Occurences'");
+    fprintf(gnuplot, "set xlabel \"Value\"");
+    fprintf(gnuplot, "set ylabel \"Occurences\"");
     fprintf(gnuplot, "set terminal png size 1200,900;");
-    fprintf(gnuplot, "plot '%s' using 2:3 with boxes",  _tmpfname);
+    fprintf(gnuplot, "plot \"%s\" using 2:3 with boxes;\n",  _tmpfname);
     fflush(gnuplot);
 
     /* Clean up */
@@ -291,5 +292,5 @@ plot '/mnt/c/Users/mbern/Desktop/gplot/data.dat' using 2:3 with boxes title "dat
 
 }
 
-
+#endif /* GNUPLOT_IS_INSTALLED */
 

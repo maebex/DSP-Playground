@@ -14,14 +14,12 @@ typedef double_t DSPPG_DigSignal_payloadType_t;
 
 
 /**
- * @brief Contains measurement data
- * 
+ * @brief Time domain signal
 */
 typedef struct {
     size_t len;                                 // Number of samples in data
-    uint32_t *sample;                           // Number of sample TODO
     DSPPG_DigSignal_payloadType_t *data;        // Sampled data
-}DSPPG_DigSignal_t;
+}DSPPG_DigSignal_TD_t;
 
 
 
@@ -36,7 +34,7 @@ typedef struct {
  *         0 else
  * 
 */
-int DSPPG__Signals__DigSignal__setData(DSPPG_DigSignal_t *sig, 
+int DSPPG__Signals__DigSignal__setData(DSPPG_DigSignal_TD_t *sig, 
                                        size_t len,
                                        DSPPG_DigSignal_payloadType_t *data);
 
@@ -54,9 +52,9 @@ int DSPPG__Signals__DigSignal__setData(DSPPG_DigSignal_t *sig,
  * @param[out] out convoluted signal
  * 
 */
-int DSPPG__Signals__DigSignal__convoluteIn(DSPPG_DigSignal_t *out,
-                                           DSPPG_DigSignal_t *in,
-                                           DSPPG_DigSignal_t *filter);
+int DSPPG__Signals__DigSignal__convoluteIn(DSPPG_DigSignal_TD_t *out,
+                                           DSPPG_DigSignal_TD_t *in,
+                                           DSPPG_DigSignal_TD_t *filter);
 
 
 /**
@@ -71,18 +69,18 @@ int DSPPG__Signals__DigSignal__convoluteIn(DSPPG_DigSignal_t *out,
  * @param[out] out convoluted signal
  * 
 */
-int DSPPG__Signals__DigSignal__convoluteOut(DSPPG_DigSignal_t *out,
-                                            DSPPG_DigSignal_t *in,
-                                            DSPPG_DigSignal_t *filter);
+int DSPPG__Signals__DigSignal__convoluteOut(DSPPG_DigSignal_TD_t *out,
+                                            DSPPG_DigSignal_TD_t *in,
+                                            DSPPG_DigSignal_TD_t *filter);
 
 
 /**
  * @brief Convolute 
  * 
 */
-int DSPPG__Signals__DigSignal__correlate(DSPPG_DigSignal_t *out,
-                                         DSPPG_DigSignal_t *in,
-                                         DSPPG_DigSignal_t *filter);
+int DSPPG__Signals__DigSignal__correlate(DSPPG_DigSignal_TD_t *out,
+                                         DSPPG_DigSignal_TD_t *in,
+                                         DSPPG_DigSignal_TD_t *filter);
 
 
 
@@ -90,7 +88,7 @@ int DSPPG__Signals__DigSignal__correlate(DSPPG_DigSignal_t *out,
  * @brief Free memory allocated dynamically for sig->data
  * 
 */
-void DSPPG__Signals__DigSignal__destroy(DSPPG_DigSignal_t *sig);
+void DSPPG__Signals__DigSignal__destroy(DSPPG_DigSignal_TD_t *sig);
 
 
 /**
@@ -118,7 +116,7 @@ void DSPPG__Signals__DigSignal__destroy(DSPPG_DigSignal_t *sig);
  *   (4) add the desired mean
  * 
  */
-int DSPPG__Signals__DigSignal__generateNoise(DSPPG_DigSignal_t *out,
+int DSPPG__Signals__DigSignal__generateNoise(DSPPG_DigSignal_TD_t *out,
                                              double_t mean, 
                                              double_t std,
                                              size_t len);
@@ -133,7 +131,7 @@ int DSPPG__Signals__DigSignal__generateNoise(DSPPG_DigSignal_t *out,
  * @param[in] fpath, path and filename where it should be stored
  * 
 */
-void DSPPG__Signals__DigSignal__plotData(DSPPG_DigSignal_t *sig,
+void DSPPG__Signals__DigSignal__plotData(DSPPG_DigSignal_TD_t *sig,
                                          const char * const fpath);
 
 /**
@@ -144,7 +142,7 @@ void DSPPG__Signals__DigSignal__plotData(DSPPG_DigSignal_t *sig,
  * @param[in] datpath Path where data file is top be stored
  * 
 */
-void DSPPG__Signals__DigSignal__plotHist(DSPPG_DigSignal_t *sig,
+void DSPPG__Signals__DigSignal__plotHist(DSPPG_DigSignal_TD_t *sig,
                                          const char * const pngpath,
                                          const char * const datpath);
 
