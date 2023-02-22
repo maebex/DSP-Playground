@@ -19,14 +19,13 @@ struct DSPPG__Transformations__DFT_Component {
 */
 typedef struct {
     DSPPG_DigSignal_TD_t *signal;
+    size_t numComponents;
     DSPPG__Transformations__DFT_Component *real;
     DSPPG__Transformations__DFT_Component *imaginary;
 }DSPPG_DigSignal_FD_t;
 
 
 
-DSPPG__Transformations__DFT_Decomposition_init(DSPPG_DigSignal_FD_t *decomposition, 
-                                               DSPPG_DigSignal_TD_t *signal);
 
 
 
