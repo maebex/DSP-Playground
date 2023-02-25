@@ -6,7 +6,7 @@
         "unity.h": "c"
     },
     "cmake.ctestArgs": [
-        //    "--verbose",
+           "--verbose",
         //    "-D", "ExperimentalMemCheck"
        ],
 }

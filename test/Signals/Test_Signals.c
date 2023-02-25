@@ -119,9 +119,9 @@ void test__DSPPG__Signals__DigSignal__generateNoise(void)
     TEST_ASSERT_DOUBLE_WITHIN(0.1, mean, cont.mean);
     TEST_ASSERT_DOUBLE_WITHIN(0.1, std, cont.std.std);
     #ifdef TEST_PLOTTING
-    char *path1 = "/mnt/c/Users/mberndt/Desktop/gplot/testnoise.png";
-    char *path2 = "/mnt/c/Users/mberndt/Desktop/gplot/testhist.png";
-    char *path3 = "/mnt/c/Users/mberndt/Desktop/gplot/testdata.dat";
+    char *path1 = "/mnt/c/Users/mbern/Desktop/gplot/testnoise.png";
+    char *path2 = "/mnt/c/Users/mbern/Desktop/gplot/testhist.png";
+    char *path3 = "/mnt/c/Users/mbern/Desktop/gplot/testdata.dat";
     DSPPG__Signals__DigSignal__plotData(cont.signal, path1);
     DSPPG__Signals__DigSignal__plotHist(cont.signal, path2, path3);
     #endif /* TEST_PLOTTING */

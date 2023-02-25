@@ -64,6 +64,7 @@ add_subdirectory(src)
 include(CTest)
 add_subdirectory(test/Signals)
 add_subdirectory(test/Statistics)
+add_subdirectory(test/DFT)
 #
 # Setup Memory Checker
 # --> Run MemCheck using: ctest -R <testname> -D ExperimentalMemCheck

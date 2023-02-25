@@ -169,6 +169,12 @@ int DSPPG__Signals__DigSignal__generateNoise(DSPPG_DigSignal_TD_t *out,
 void DSPPG__Signals__DigSignal__plotData(DSPPG_DigSignal_TD_t *sig,
                                          const char *fpath)
 {
+    int err;
+    if(!fpath || !sig){
+        err = EFAULT;
+        log_error("%s %d", __FUNCTION__, err);
+        return err;
+    }
     FILE *gnuplot = popen("gnuplot", "w");
     fprintf(gnuplot, "set terminal png size 1200,900;");
     fprintf(gnuplot, "set output '%s';", fpath);
@@ -177,7 +183,7 @@ void DSPPG__Signals__DigSignal__plotData(DSPPG_DigSignal_TD_t *sig,
         fprintf(gnuplot, "%d %lf\n", i, sig->data[i]);
     fprintf(gnuplot, "e\n");
     fflush(gnuplot);
-    int err = fclose(gnuplot);
+    err = fclose(gnuplot);
 }
 
 
@@ -187,6 +193,12 @@ void DSPPG__Signals__DigSignal__plotHist(DSPPG_DigSignal_TD_t *sig,
                                          const char * const datpath)
 {
     int err = 0;
+    
+    if(!pngpath || !sig || !datpath){
+        err = EFAULT;
+        log_error("%s %d", __FUNCTION__, err);
+        return err;
+    }
     
     /* Find min and max value - so we know how many classes we need */
     double_t min, max;
@@ -279,8 +291,8 @@ plot '/mnt/c/Users/mbern/Desktop/gplot/data.dat' using 2:3 with boxes title "dat
     fprintf(gnuplot, "set output \"%s\";", pngpath);
     fprintf(gnuplot, "set boxwidth 1.0;");
     fprintf(gnuplot, "set style fill solid;");
-    fprintf(gnuplot, "set xlabel \"Value\"");
-    fprintf(gnuplot, "set ylabel \"Occurences\"");
+    fprintf(gnuplot, "set xlabel \"Value\";");
+    fprintf(gnuplot, "set ylabel \"Occurences\";");
     fprintf(gnuplot, "set terminal png size 1200,900;");
     fprintf(gnuplot, "plot \"%s\" using 2:3 with boxes;\n",  _tmpfname);
     fflush(gnuplot);

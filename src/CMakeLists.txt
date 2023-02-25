@@ -1,6 +1,6 @@
 set(SOURCES Signals.c
             Statistics.c
-            Transformations.c
+            DFT.c
             Helpers.c
 )
 
