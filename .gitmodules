@@ -4,3 +4,6 @@
 [submodule "submodules/log.c"]
 	path = submodules/log.c
 	url = git@github.com:maebex/log.c.git
+[submodule "submodules/cJSON"]
+	path = submodules/cJSON
+	url = https://github.com/DaveGamble/cJSON.git

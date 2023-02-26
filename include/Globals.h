@@ -10,10 +10,15 @@
 #include <string.h>
 #include <math.h>
 
-#include "log.h"
+#include "log.c/src/log.h"
+#include "cJSON/cJSON.h"
 
 
 /* Use unity_config.h for configuration */
 #define UNITY_INCLUDE_CONFIG_H
+
+/* Plot type definition */
+#define PLOT_TYPE_DECOMPOSITION "Decomposition"  // Rect and Polar plot in one image
+#define PLOT_TYPE_REAL_SIGNAL "Signal" 
 
 #endif /* E13732A3_D555_427A_968E_3F8122238753 */

@@ -83,8 +83,8 @@ int DSPPG__Statistics__StatCont__calcStd(DSPPG_StatCont_t *cont)
 int DSPPG__Statistics__StatCont__updateStd(DSPPG_StatCont_t *cont,
                                            uint16_t n)
 {
-    double tmp;
-    double subtrahend;
+    float tmp;
+    float subtrahend;
     if(0==cont->signal->len){
         int err = EFAULT;
         log_error("%s %d", __FUNCTION__, err);

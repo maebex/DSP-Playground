@@ -12,9 +12,9 @@
 */
 typedef struct {
     DSPPG_DigSignal_TD_t *signal;          // Signal
-    double mean;                        // Mean
+    float mean;                        // Mean
     struct {
-        double std;     // Standard Deviation
+        float std;     // Standard Deviation
         double _sumSq;  // Sum of squares
         double _sum;    // Sum
     }std;

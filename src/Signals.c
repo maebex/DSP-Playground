@@ -18,6 +18,7 @@ int DSPPG__Signals__DigSignal__setData(DSPPG_DigSignal_TD_t *sig,
         sig->len = len;
         sig->data = data;
     }
+    sig->sampleNum = NULL; // TODO
     return 0;
 }
 
@@ -121,13 +122,17 @@ void DSPPG__Signals__DigSignal__destroy(DSPPG_DigSignal_TD_t *sig)
         free(sig->data);
         sig->data = NULL;
     }
+    if(sig->sampleNum){
+        free(sig->sampleNum);
+        sig->sampleNum = NULL;
+    }
 }
 
 
 
 int DSPPG__Signals__DigSignal__generateNoise(DSPPG_DigSignal_TD_t *out,
-                                             double_t mean, 
-                                             double_t std,
+                                             float mean, 
+                                             float std,
                                              size_t len)
 {
     int err = 0;
@@ -152,157 +157,63 @@ int DSPPG__Signals__DigSignal__generateNoise(DSPPG_DigSignal_TD_t *out,
     for(int i=0; i<len; i++){  // samples
         for (int j=0; j<num_iters; j++){
             out->data[i] += DSPPG__Helpers__genRand(1.0);
-
         }
         out->data[i] -= (num_iters>>1);
         out->data[i] *= std;
         out->data[i] += mean;
     }
+    out->sampleNum = NULL; // TODO
 
     return err;
 }
 
-
-#ifdef GNUPLOT_IS_INSTALLED
-
-
-void DSPPG__Signals__DigSignal__plotData(DSPPG_DigSignal_TD_t *sig,
-                                         const char *fpath)
+void DSPPG__Signals__DigSignal__toJSON(DSPPG_DigSignal_TD_t *signal,
+                                       const char * const path)
 {
-    int err;
-    if(!fpath || !sig){
-        err = EFAULT;
-        log_error("%s %d", __FUNCTION__, err);
-        return err;
+    if(!path || !signal){
+        log_error("%s %d", __FUNCTION__, EFAULT);
+        return;
     }
-    FILE *gnuplot = popen("gnuplot", "w");
-    fprintf(gnuplot, "set terminal png size 1200,900;");
-    fprintf(gnuplot, "set output '%s';", fpath);
-    fprintf(gnuplot, "plot '-'\n");
-    for (int i = 0; i < sig->len; i++)
-        fprintf(gnuplot, "%d %lf\n", i, sig->data[i]);
-    fprintf(gnuplot, "e\n");
-    fflush(gnuplot);
-    err = fclose(gnuplot);
-}
+    const size_t MAXLEN = 1000;
+    const size_t pathLen = strnlen(path, MAXLEN);  // length of path to directory
+    size_t fnameLen;  // length of filename
 
+    char fname[] = "/signal_data.json";
+    fnameLen = strnlen(fname, MAXLEN);
+    char fullPathName[pathLen+fnameLen+1];
+    memset(fullPathName, 0, pathLen+fnameLen+1);
+    memcpy(fullPathName, path, pathLen);
+    strcat(fullPathName, fname);
 
+    /* General */
+    cJSON *json = cJSON_CreateObject();
 
-void DSPPG__Signals__DigSignal__plotHist(DSPPG_DigSignal_TD_t *sig,
-                                         const char * const pngpath,
-                                         const char * const datpath)
-{
-    int err = 0;
-    
-    if(!pngpath || !sig || !datpath){
-        err = EFAULT;
-        log_error("%s %d", __FUNCTION__, err);
-        return err;
+    cJSON_AddStringToObject(json, "PlotType", PLOT_TYPE_REAL_SIGNAL);
+    cJSON_AddNumberToObject(json, "Length", signal->len);
+    if(signal->sampleNum){
+        cJSON *sampleNum = cJSON_CreateIntArray(signal->sampleNum, signal->len);
+        cJSON_AddItemToObject(json, "SampleNum", sampleNum);
     }
-    
-    /* Find min and max value - so we know how many classes we need */
-    double_t min, max;
-    unsigned int idx = 1;
-    while(sig->data[0] == sig->data[idx]){
-        idx++;
+    cJSON *data = cJSON_CreateFloatArray(signal->data, signal->len);
+    cJSON_AddItemToObject(json, "SampleData", data);
+
+    /* Write */
+    char *asString = NULL;
+    asString = cJSON_Print(json);
+    cJSON_Delete(json);
+
+    FILE *file = fopen(fullPathName, "w+");
+    if (!file) {
+        log_error("%s could not open file %s", __FUNCTION__, fullPathName);
+        return;
     }
-    if(sig->data[0] < sig->data[idx]){
-        min = sig->data[0];
-        max = sig->data[idx];
-    }else{
-        min = sig->data[idx];
-        max = sig->data[0];
+    int err = fputs(asString, file);
+    if (err == EOF) {
+        log_error("%s could not write to file %s", __FUNCTION__, fullPathName);
+        return;
     }
-    idx++;
-    for(;idx<sig->len; idx++){
-        if(sig->data[idx] > max){
-            max = sig->data[idx];
-        }else if(sig->data[idx] < min){
-            min = sig->data[idx];
-        }
-    }
-    min = floor(min);
-    max = ceil(max);
-    const unsigned int maxnumEntries = max-min+1;
-
-    /* Make hash table for the bars */
-    ENTRY e, *ep;
-    hcreate(maxnumEntries);
-   for (int i = 0; i < sig->len; i++) {
-        const unsigned int MAX_STRINGLENGTH = 100;
-        char _tmpKeyStr[MAX_STRINGLENGTH];
-        memset(_tmpKeyStr, 0, MAX_STRINGLENGTH);
-        snprintf(_tmpKeyStr, MAX_STRINGLENGTH-1, "%d", (int)(floor(sig->data[i])));
-        e.key = _tmpKeyStr;
-
-        // Check if already there
-        ep = hsearch(e, FIND);
-        if (NULL == ep){
-            ep = hsearch(e, ENTER);
-            ep->data = (void*) 1;
-        }else{
-            ep->data++;
-        }
-
-        if (ep == NULL) {
-            exit(EXIT_FAILURE);
-        }
-    }
-
-    /* Fill temporary file with the data */
-    const char * const _tmpfname = datpath;
-    FILE *_tmpf = fopen(_tmpfname, "w+");
-    if(!_tmpf){
-        exit(EXIT_FAILURE);
-    }
-    int _tmpMin = min;
-    for (int i = 0; i < sig->len; i++) {
-
-        const unsigned int MAX_STRINGLENGTH = 100;
-        char _tmpKeyStr[MAX_STRINGLENGTH];
-        memset(_tmpKeyStr, 0, MAX_STRINGLENGTH);
-        snprintf(_tmpKeyStr, MAX_STRINGLENGTH-1, "%d", _tmpMin);
-        e.key = _tmpKeyStr;
-
-        ep = hsearch(e, FIND);
-        if(ep){
-            int bla = (long)ep->data;
-            err = fprintf(_tmpf, "%d %d %ld\n", i, _tmpMin, (long)ep->data);
-        }
-        _tmpMin++;
-    }
-    fflush(_tmpf);
-
-/*
-Strangely if we use these commands in gnuplot CLI it works:
-
-reset 
-set output '/mnt/c/Users/mbern/Desktop/gplot/hist.png'
-set boxwidth 1.0
-set style fill solid
-set terminal png size 1200,800
-set xlabel 'Value'
-set ylabel 'Occurences'
-plot '/mnt/c/Users/mbern/Desktop/gplot/data.dat' using 2:3 with boxes title "data"
-*/
-
-    /* Print plot */
-    FILE *gnuplot = popen("gnuplot", "w");
-    fprintf(gnuplot, "set output \"%s\";", pngpath);
-    fprintf(gnuplot, "set boxwidth 1.0;");
-    fprintf(gnuplot, "set style fill solid;");
-    fprintf(gnuplot, "set xlabel \"Value\";");
-    fprintf(gnuplot, "set ylabel \"Occurences\";");
-    fprintf(gnuplot, "set terminal png size 1200,900;");
-    fprintf(gnuplot, "plot \"%s\" using 2:3 with boxes;\n",  _tmpfname);
-    fflush(gnuplot);
-
-    /* Clean up */
-    err = fclose(_tmpf);
-    err = fclose(gnuplot);
-    hdestroy();
+    fclose(file);
 
 }
 
-#endif /* GNUPLOT_IS_INSTALLED */
 

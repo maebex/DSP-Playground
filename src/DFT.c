@@ -3,9 +3,10 @@
 
 
 
-int DSPPG__Transformations__realDFT_Decomposition_decompose(DSPPG_DigSignal_FD_t *decomposition, 
-                                                            DSPPG_DigSignal_TD_t *signal,
-                                                            uint32_t samplingRate)
+
+int DSPPG__Transformations__realDFT_Decomposition__decompose(DSPPG_DigSignal_FD_t *decomposition, 
+                                                             DSPPG_DigSignal_TD_t *signal,
+                                                             uint32_t samplingRate)
 {
     int err = 0;
     if(!decomposition || !signal || !signal->data || 0==signal->len){
@@ -81,7 +82,7 @@ cleanup:
 }
 
 
-int DSPPG__Transformations__realDFT_Decomposition_destroy(DSPPG_DigSignal_FD_t *decomposition)
+int DSPPG__Transformations__realDFT_Decomposition__destroy(DSPPG_DigSignal_FD_t *decomposition)
 {
     int err = 0;
     if(!decomposition){
@@ -109,7 +110,7 @@ int DSPPG__Transformations__realDFT_Decomposition_destroy(DSPPG_DigSignal_FD_t *
 }
 
 
-int DSPPG__Transformations__realDFT_Decomposition_printRect(DSPPG_DigSignal_FD_t *decomposition)
+int DSPPG__Transformations__realDFT_Decomposition__printRect(DSPPG_DigSignal_FD_t *decomposition)
 {
     int err = 0;
     if(!decomposition || !decomposition->real || !decomposition->imaginary){
@@ -132,7 +133,7 @@ int DSPPG__Transformations__realDFT_Decomposition_printRect(DSPPG_DigSignal_FD_t
 
 }
 
-int DSPPG__Transformations__realDFT_Decomposition_printPolar(DSPPG_DigSignal_FD_t *decomposition)
+int DSPPG__Transformations__realDFT_Decomposition__printPolar(DSPPG_DigSignal_FD_t *decomposition)
 {
     int err = 0;
     if(!decomposition || !decomposition->real || !decomposition->imaginary){
@@ -156,12 +157,8 @@ int DSPPG__Transformations__realDFT_Decomposition_printPolar(DSPPG_DigSignal_FD_
 }
 
 
-
-#ifdef GNUPLOT_IS_INSTALLED
-
-
-void DSPPG__Transformations__realDFT_Decomposition_plotSpectrum(DSPPG_DigSignal_FD_t *decomposition,
-                                                                const char * const path)
+void DSPPG__Transformations__realDFT_Decomposition__toJSON(DSPPG_DigSignal_FD_t *decomposition,
+                                                           const char * const path)
 {
     if(!path || !decomposition){
         log_error("%s %d", __FUNCTION__, EFAULT);
@@ -170,53 +167,63 @@ void DSPPG__Transformations__realDFT_Decomposition_plotSpectrum(DSPPG_DigSignal_
     const size_t MAXLEN = 1000;
     const size_t pathLen = strnlen(path, MAXLEN);  // length of path to directory
     size_t fnameLen;  // length of filename
-    FILE *gnuplot = NULL;
 
-    /* REAL PART*/
-    char fname_rect_Re[] = "DFT_Real.png";
-    fnameLen = strnlen(fname_rect_Re, MAXLEN);
-    char rect_Re[pathLen+fnameLen+1];
-    memset(rect_Re, 0, pathLen+fnameLen+1);
-    memcpy(rect_Re, path, pathLen);
-    strcat(rect_Re, fname_rect_Re);
-    gnuplot = popen("gnuplot", "w");
-    fprintf(gnuplot, "set terminal png size 1200,900;");
-    fprintf(gnuplot, "set output '%s';", rect_Re);
-    fprintf(gnuplot, "set xlabel 'Cos Frequency component';");
-    fprintf(gnuplot, "set ylabel 'Amplitude';");
-    fprintf(gnuplot, "plot '-'\n");
-    for (int i = 0; i < decomposition->numComponents; i++)
-        fprintf(gnuplot, "%d %lf\n", i, decomposition->real[i]);
-    fflush(gnuplot);
-    fclose(gnuplot);
+    char fname[] = "/decomposition_data.json";
+    fnameLen = strnlen(fname, MAXLEN);
+    char fullPathName[pathLen+fnameLen+1];
+    memset(fullPathName, 0, pathLen+fnameLen+1);
+    memcpy(fullPathName, path, pathLen);
+    strcat(fullPathName, fname);
+
+    /* General */
+    cJSON *data = cJSON_CreateObject();
     
-    /* IMAGINARY PART*/
-    char fname_rect_Im[] = "DFT_Imaginary.png";
-    fnameLen = strnlen(fname_rect_Im, MAXLEN);
-    char rect_Im[pathLen+fnameLen+1];
-    memset(rect_Im, 0, pathLen+fnameLen+1);
-    memcpy(rect_Im, path, pathLen);
-    strcat(rect_Im, fname_rect_Im);
-    gnuplot = popen("gnuplot", "w");
-    fprintf(gnuplot, "set terminal png size 1200,900;");
-    fprintf(gnuplot, "set output '%s';", rect_Im);
-    fprintf(gnuplot, "set yrange [-5:5];");
-    fprintf(gnuplot, "set xlabel 'Sin Frequency component';");
-    fprintf(gnuplot, "set ylabel 'Amplitude';");
-    fprintf(gnuplot, "plot '-'\n");
-    for (int i = 0; i < decomposition->numComponents; i++)
-        fprintf(gnuplot, "%d %lf\n", i, decomposition->imaginary[i]);
-    fflush(gnuplot);
-    fclose(gnuplot);
+    cJSON_AddStringToObject(data, "plotType", PLOT_TYPE_DECOMPOSITION);
+    cJSON_AddNumberToObject(data, "numComponents", decomposition->numComponents);
+    cJSON_AddNumberToObject(data, "samplingRate", decomposition->samplingRate);
 
+    cJSON *payload = cJSON_CreateObject();
+    cJSON_AddItemToObject(data, "Payload", payload);
 
+    /* Rectangular */
+    cJSON *rectangular = cJSON_CreateObject();
 
+    cJSON *real = cJSON_CreateFloatArray(decomposition->real, decomposition->numComponents);
+    cJSON_AddItemToObject(rectangular, "Real", real);
 
+    cJSON *imaginary = cJSON_CreateFloatArray(decomposition->imaginary, decomposition->numComponents);
+    cJSON_AddItemToObject(rectangular, "Imaginary", imaginary);
 
+    cJSON_AddItemToObject(payload, "Rectangular", rectangular);
 
+    /* Polar */
+    cJSON *polar = cJSON_CreateObject();
+
+    cJSON *magnitude = cJSON_CreateFloatArray(decomposition->magnitude, decomposition->numComponents);
+    cJSON_AddItemToObject(polar, "Magnitude", magnitude);
+
+    cJSON *phase = cJSON_CreateFloatArray(decomposition->phase, decomposition->numComponents);
+    cJSON_AddItemToObject(polar, "Phase", phase);
+
+    cJSON_AddItemToObject(payload, "Polar", polar);
+
+    /* Write */
+    char *asString = NULL;
+    asString = cJSON_Print(data);
+    cJSON_Delete(data);
+
+    FILE *file = fopen(fullPathName, "w+");
+    if (!file) {
+        log_error("%s could not open file %s", __FUNCTION__, fullPathName);
+        return;
+    }
+    int err = fputs(asString, file);
+    if (err == EOF) {
+        log_error("%s could not write to file %s", __FUNCTION__, fullPathName);
+        return;
+    }
+    fclose(file);
 
 }
 
 
-
-#endif /* GNUPLOT_IS_INSTALLED */

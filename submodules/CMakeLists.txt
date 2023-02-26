@@ -7,3 +7,7 @@ target_include_directories(unity PUBLIC Unity/src
 
 add_library(log_c STATIC log.c/src/log.c)
 target_include_directories(log_c PUBLIC log.c/src)
+
+
+add_library(cJSON STATIC cJSON/cJSON.c cJSON/cJSON_Utils.c)
+target_include_directories(cJSON PUBLIC cJSON)

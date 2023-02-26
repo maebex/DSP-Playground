@@ -9,7 +9,7 @@
 #endif /* GNUPLOT_IS_INSTALLED */
 
 
-typedef double_t DSPPG_DigSignal_payloadType_t;
+typedef float DSPPG_DigSignal_payloadType_t;
 
 
 
@@ -18,6 +18,7 @@ typedef double_t DSPPG_DigSignal_payloadType_t;
 */
 typedef struct {
     size_t len;                                 // Number of samples in data
+    int32_t *sampleNum;                         // TODO - number/ID of samples corresponding to samples in data
     DSPPG_DigSignal_payloadType_t *data;        // Sampled data
 }DSPPG_DigSignal_TD_t;
 
@@ -117,36 +118,24 @@ void DSPPG__Signals__DigSignal__destroy(DSPPG_DigSignal_TD_t *sig);
  * 
  */
 int DSPPG__Signals__DigSignal__generateNoise(DSPPG_DigSignal_TD_t *out,
-                                             double_t mean, 
-                                             double_t std,
+                                             float mean, 
+                                             float std,
                                              size_t len);
 
 
-#ifdef GNUPLOT_IS_INSTALLED
+
 
 /**
- * @brief Show the data as a scatter plot
+ * @brief Store data to JSON file
  * 
- * @param[in] sig pointer to signal that is to be plotted
- * @param[in] fpath, path and filename where it should be stored
+ * @param[in] signal pointer to data structure
+ * @param[in] path, Data is stored here: "{path}/signal_data.json"
  * 
-*/
-void DSPPG__Signals__DigSignal__plotData(DSPPG_DigSignal_TD_t *sig,
-                                         const char * const fpath);
-
-/**
- * @brief Show the data as a histogram
- * 
- * @param[in] sig pointer to signal that is to be plotted
- * @param[in] pngpath Path where png is to be stores
- * @param[in] datpath Path where data file is top be stored
+ * @details The data can be fed into tools/DSPPG_Plot.py as input file 
  * 
 */
-void DSPPG__Signals__DigSignal__plotHist(DSPPG_DigSignal_TD_t *sig,
-                                         const char * const pngpath,
-                                         const char * const datpath);
-
-#endif /* GNUPLOT_IS_INSTALLED */
+void DSPPG__Signals__DigSignal__toJSON(DSPPG_DigSignal_TD_t *signal,
+                                       const char * const path);
 
 
 #endif /* FCFCCEF9_F5AC_4F02_86D8_1514E83FC384 */

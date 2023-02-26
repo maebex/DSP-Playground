@@ -7,14 +7,14 @@
 extern unsigned int DSPPG__SRAND_INITIALIZED;
 
 /**
- * @brief Generate a random double between 0.0 and max
+ * @brief Generate a random float between 0.0 and max
  * 
  * @param[in] max uppe rlimit
  * 
  * @return random number
  * 
 */
-double DSPPG__Helpers__genRand(double max);
+float DSPPG__Helpers__genRand(float max);
 
 
 #endif /* A223A8BD_7F08_431C_883A_7356FF93A292 */

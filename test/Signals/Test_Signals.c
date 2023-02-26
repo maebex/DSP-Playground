@@ -73,14 +73,14 @@ void test__DSPPG__Signals__DigSignal__convolute_Random(void)
     memset(&out, 0, sizeof out);
     err = DSPPG__Signals__DigSignal__convoluteIn(&out, &in, &filter);
     TEST_ASSERT_EQUAL_INT(0, err);
-    TEST_ASSERT_EQUAL_DOUBLE_ARRAY(result.data, out.data, RESULT_SIZE);
+    TEST_ASSERT_EQUAL_FLOAT_ARRAY(result.data, out.data, RESULT_SIZE);
     DSPPG__Signals__DigSignal__destroy(&out);
 
     // Convolution - Outside algorithm
     memset(&out, 0, sizeof out);
     err = DSPPG__Signals__DigSignal__convoluteOut(&out, &in, &filter);
     TEST_ASSERT_EQUAL_INT(0, err);
-    TEST_ASSERT_EQUAL_DOUBLE_ARRAY(result.data, out.data, RESULT_SIZE);
+    TEST_ASSERT_EQUAL_FLOAT_ARRAY(result.data, out.data, RESULT_SIZE);
     DSPPG__Signals__DigSignal__destroy(&out);
 
 }
@@ -98,15 +98,15 @@ void test__DSPPG__Signals__DigSignal__convoluteIn_Zero(void)
 void test__DSPPG__Signals__DigSignal__generateNoise(void)
 {
     int err;
-    double_t mean;
-    double_t std;
+    float mean;
+    float std;
     size_t numSamps;
     DSPPG_StatCont_t cont;
     DSPPG_DigSignal_TD_t noise;
 
     /* Test 1 */
-    mean = 350.5;
-    std = 1.5;
+    mean = 0;
+    std = 15;
     numSamps = 100000;
     err = DSPPG__Signals__DigSignal__generateNoise(&noise, mean, std, numSamps);
     TEST_ASSERT_EQUAL_INT(0, err);
@@ -116,14 +116,11 @@ void test__DSPPG__Signals__DigSignal__generateNoise(void)
     TEST_ASSERT_EQUAL_INT(0, err);
     err = DSPPG__Statistics__StatCont__calcStd(&cont);
     TEST_ASSERT_EQUAL_INT(0, err);
-    TEST_ASSERT_DOUBLE_WITHIN(0.1, mean, cont.mean);
-    TEST_ASSERT_DOUBLE_WITHIN(0.1, std, cont.std.std);
+    TEST_ASSERT_FLOAT_WITHIN(0.1, mean, cont.mean);
+    TEST_ASSERT_FLOAT_WITHIN(0.1, std, cont.std.std);
     #ifdef TEST_PLOTTING
-    char *path1 = "/mnt/c/Users/mbern/Desktop/gplot/testnoise.png";
-    char *path2 = "/mnt/c/Users/mbern/Desktop/gplot/testhist.png";
-    char *path3 = "/mnt/c/Users/mbern/Desktop/gplot/testdata.dat";
-    DSPPG__Signals__DigSignal__plotData(cont.signal, path1);
-    DSPPG__Signals__DigSignal__plotHist(cont.signal, path2, path3);
+    char *path1 = "/mnt/c/Users/mbern/Desktop/gplot/";
+    DSPPG__Signals__DigSignal__toJSON(cont.signal, path1);
     #endif /* TEST_PLOTTING */
     DSPPG__Signals__DigSignal__destroy(cont.signal);
 
