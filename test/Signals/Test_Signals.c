@@ -124,9 +124,6 @@ void test__DSPPG__Signals__DigSignal__generateNoise(void)
     #endif /* TEST_PLOTTING */
     DSPPG__Signals__DigSignal__destroy(cont.signal);
 
-
-
-
 }
 
 
