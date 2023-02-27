@@ -6,29 +6,78 @@
 
 
 
+#define TEST_DATA_FILE_STORAGE_PATH "/mnt/c/Users/mberndt/Desktop/gplot/"
+
+#define STORE_RESULTS_TEST_5
+
 DSPPG_DigSignal_TD_t sigStump_1;
 DSPPG_DigSignal_TD_t sigStump_2;
 DSPPG_DigSignal_TD_t sigStump_3;
+// DSPPG_DigSignal_TD_t sigStump_4;
+DSPPG_DigSignal_TD_t sigStump_5;
 
-/* TEST 1 - sin(1Hz) */
+
+/* TEST 1 - sin(2*Pi*1Hz) */
 #define TEST_1_ARRAY_LENGTH 8
 #define TEST_1_SAMPLE_RATE 8 // Hz
-float TEST_1_ARRAY[TEST_1_ARRAY_LENGTH] = {0.0, 0.7071, 1.0, 0.7071, 0, -0.7071, -1.0, -0.7071 };
+#define TEST_1_OFFSET 0.0
+#define TEST_1_FREQUENCY 1.0
+float TEST_1_ARRAY[TEST_1_ARRAY_LENGTH] = {
+    TEST_1_OFFSET+sin(2.*M_PI*TEST_1_FREQUENCY*0./TEST_1_ARRAY_LENGTH),
+    TEST_1_OFFSET+sin(2.*M_PI*TEST_1_FREQUENCY*1./TEST_1_ARRAY_LENGTH),
+    TEST_1_OFFSET+sin(2.*M_PI*TEST_1_FREQUENCY*2./TEST_1_ARRAY_LENGTH),
+    TEST_1_OFFSET+sin(2.*M_PI*TEST_1_FREQUENCY*3./TEST_1_ARRAY_LENGTH),
+    TEST_1_OFFSET+sin(2.*M_PI*TEST_1_FREQUENCY*4./TEST_1_ARRAY_LENGTH),
+    TEST_1_OFFSET+sin(2.*M_PI*TEST_1_FREQUENCY*5./TEST_1_ARRAY_LENGTH),
+    TEST_1_OFFSET+sin(2.*M_PI*TEST_1_FREQUENCY*6./TEST_1_ARRAY_LENGTH),
+    TEST_1_OFFSET+sin(2.*M_PI*TEST_1_FREQUENCY*7./TEST_1_ARRAY_LENGTH),
+};
 
 
-/* TEST 2 - sin(1Hz)+0.5*sin/(2Hz+(3*Pi/4)) */
+/* TEST 2 - sin(2*PI*1Hz)+0.5*sin/(2*PI*2Hz+(3*Pi/4)) */
 #define TEST_2_ARRAY_LENGTH 8
 #define TEST_2_SAMPLE_RATE 8 // Hz
-float TEST_2_ARRAY[TEST_2_ARRAY_LENGTH] = {0.3535, 0.3535, 0.6464, 1.0607, 0.3535, -1.0607, -1.3535, -0.3535};
+#define TEST_2_OFFSET 0.0
+#define TEST_2_FREQUENCY_1 1.0
+#define TEST_2_FREQUENCY_2 2.0
+#define TEST_2_PHASE_OFFSET (3.*M_PI/4.)
+#define TEST_2_SCALING_FACTOR 0.5
+float TEST_2_ARRAY[TEST_2_ARRAY_LENGTH] = {
+    TEST_2_OFFSET+sin(2.*M_PI*TEST_2_FREQUENCY_1*0./TEST_2_ARRAY_LENGTH) + TEST_2_SCALING_FACTOR*sin(2.*M_PI*TEST_2_FREQUENCY_2*0./TEST_2_ARRAY_LENGTH + TEST_2_PHASE_OFFSET),
+    TEST_2_OFFSET+sin(2.*M_PI*TEST_2_FREQUENCY_1*1./TEST_2_ARRAY_LENGTH) + TEST_2_SCALING_FACTOR*sin(2.*M_PI*TEST_2_FREQUENCY_2*1./TEST_2_ARRAY_LENGTH + TEST_2_PHASE_OFFSET),
+    TEST_2_OFFSET+sin(2.*M_PI*TEST_2_FREQUENCY_1*2./TEST_2_ARRAY_LENGTH) + TEST_2_SCALING_FACTOR*sin(2.*M_PI*TEST_2_FREQUENCY_2*2./TEST_2_ARRAY_LENGTH + TEST_2_PHASE_OFFSET),
+    TEST_2_OFFSET+sin(2.*M_PI*TEST_2_FREQUENCY_1*3./TEST_2_ARRAY_LENGTH) + TEST_2_SCALING_FACTOR*sin(2.*M_PI*TEST_2_FREQUENCY_2*3./TEST_2_ARRAY_LENGTH + TEST_2_PHASE_OFFSET),
+    TEST_2_OFFSET+sin(2.*M_PI*TEST_2_FREQUENCY_1*4./TEST_2_ARRAY_LENGTH) + TEST_2_SCALING_FACTOR*sin(2.*M_PI*TEST_2_FREQUENCY_2*4./TEST_2_ARRAY_LENGTH + TEST_2_PHASE_OFFSET),
+    TEST_2_OFFSET+sin(2.*M_PI*TEST_2_FREQUENCY_1*5./TEST_2_ARRAY_LENGTH) + TEST_2_SCALING_FACTOR*sin(2.*M_PI*TEST_2_FREQUENCY_2*5./TEST_2_ARRAY_LENGTH + TEST_2_PHASE_OFFSET),
+    TEST_2_OFFSET+sin(2.*M_PI*TEST_2_FREQUENCY_1*6./TEST_2_ARRAY_LENGTH) + TEST_2_SCALING_FACTOR*sin(2.*M_PI*TEST_2_FREQUENCY_2*6./TEST_2_ARRAY_LENGTH + TEST_2_PHASE_OFFSET),
+    TEST_2_OFFSET+sin(2.*M_PI*TEST_2_FREQUENCY_1*7./TEST_2_ARRAY_LENGTH) + TEST_2_SCALING_FACTOR*sin(2.*M_PI*TEST_2_FREQUENCY_2*7./TEST_2_ARRAY_LENGTH + TEST_2_PHASE_OFFSET)
+};
 
 
-/* TEST 3 - 3+sin(1Hz) */
+/* TEST 3 - 3+sin(2*Pi*1Hz) */
 #define TEST_3_ARRAY_LENGTH 8
 #define TEST_3_SAMPLE_RATE 8 // Hz
-float TEST_3_ARRAY[TEST_3_ARRAY_LENGTH] = {3.0, 3.7071, 4.0, 3.7071, 3.0, 2.2929, 2.0, 2.2929 };
+#define TEST_3_OFFSET 3.0
+float TEST_3_ARRAY[TEST_3_ARRAY_LENGTH] = {
+    TEST_3_OFFSET+sin(2.*M_PI*1.*0./TEST_3_ARRAY_LENGTH),
+    TEST_3_OFFSET+sin(2.*M_PI*1.*1./TEST_3_ARRAY_LENGTH),
+    TEST_3_OFFSET+sin(2.*M_PI*1.*2./TEST_3_ARRAY_LENGTH),
+    TEST_3_OFFSET+sin(2.*M_PI*1.*3./TEST_3_ARRAY_LENGTH),
+    TEST_3_OFFSET+sin(2.*M_PI*1.*4./TEST_3_ARRAY_LENGTH),
+    TEST_3_OFFSET+sin(2.*M_PI*1.*5./TEST_3_ARRAY_LENGTH),
+    TEST_3_OFFSET+sin(2.*M_PI*1.*6./TEST_3_ARRAY_LENGTH),
+    TEST_3_OFFSET+sin(2.*M_PI*1.*7./TEST_3_ARRAY_LENGTH)
+};
 
 
 /* TEST 4 - Leakage */
+
+
+
+/* TEST 5 - Rectangular window */
+#define TEST_5_ARRAY_LENGTH 64
+#define TEST_5_SAMPLE_RATE 8 // Hz
+float TEST_5_ARRAY[TEST_5_ARRAY_LENGTH] = {0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0};
 
 
 
@@ -46,6 +95,9 @@ void setUp(void)
     TEST_ASSERT_EQUAL_INT(0, err);
 
 
+    err = DSPPG__Signals__DigSignal__setData(&sigStump_5, TEST_5_ARRAY_LENGTH, TEST_5_ARRAY);
+    TEST_ASSERT_EQUAL_INT(0, err);
+
 }
 
 void tearDown(void) 
@@ -54,37 +106,57 @@ void tearDown(void)
     ;
 }
 
-void DSPPG__Transformations__realDFT_Decomposition__decompose__1(void)
+void DSPPG__Transformations__realDFT_Decomposition__analyse__1(void)
 {
     int err;
     DSPPG_DigSignal_FD_t decomp;
-    err = DSPPG__Transformations__realDFT_Decomposition__decompose(&decomp, &sigStump_1, TEST_1_SAMPLE_RATE);
+    err = DSPPG__Transformations__realDFT_Decomposition__analyse(&decomp, &sigStump_1, TEST_1_SAMPLE_RATE);
     TEST_ASSERT_EQUAL_INT(0, err);
-    // DSPPG__Transformations__realDFT_Decomposition__printRect(&decomp);
+    #ifdef STORE_RESULTS_TEST_1
+    DSPPG__Transformations__realDFT_Decomposition__toJSON(&decomp, TEST_DATA_FILE_STORAGE_PATH);
+    #endif /* STORE_RESULTS_TEST_1 */
     err = DSPPG__Transformations__realDFT_Decomposition__destroy(&decomp);
     TEST_ASSERT_EQUAL_INT(0, err);
     
 }
 
-void DSPPG__Transformations__realDFT_Decomposition__decompose__2(void)
+void DSPPG__Transformations__realDFT_Decomposition__analyse__2(void)
 {
     int err;
     DSPPG_DigSignal_FD_t decomp;
-    err = DSPPG__Transformations__realDFT_Decomposition__decompose(&decomp, &sigStump_2, TEST_2_SAMPLE_RATE);
+    err = DSPPG__Transformations__realDFT_Decomposition__analyse(&decomp, &sigStump_2, TEST_2_SAMPLE_RATE);
     TEST_ASSERT_EQUAL_INT(0, err);
-    // DSPPG__Transformations__realDFT_Decomposition__printRect(&decomp);
-    DSPPG__Transformations__realDFT_Decomposition__toJSON(&decomp, "/mnt/c/Users/mbern/Desktop/gplot/");
+    #ifdef STORE_RESULTS_TEST_2
+    DSPPG__Transformations__realDFT_Decomposition__toJSON(&decomp, TEST_DATA_FILE_STORAGE_PATH);
+    #endif /* STORE_RESULTS_TEST_2 */
     err = DSPPG__Transformations__realDFT_Decomposition__destroy(&decomp);
     TEST_ASSERT_EQUAL_INT(0, err);
 }
 
-void DSPPG__Transformations__realDFT_Decomposition__decompose__3(void)
+void DSPPG__Transformations__realDFT_Decomposition__analyse__3(void)
 {
     int err;
     DSPPG_DigSignal_FD_t decomp;
-    err = DSPPG__Transformations__realDFT_Decomposition__decompose(&decomp, &sigStump_3, TEST_2_SAMPLE_RATE);
+    err = DSPPG__Transformations__realDFT_Decomposition__analyse(&decomp, &sigStump_3, TEST_3_SAMPLE_RATE);
     TEST_ASSERT_EQUAL_INT(0, err);
-    // DSPPG__Transformations__realDFT_Decomposition__printRect(&decomp);
+    #ifdef STORE_RESULTS_TEST_3
+    DSPPG__Transformations__realDFT_Decomposition__toJSON(&decomp, TEST_DATA_FILE_STORAGE_PATH);
+    #endif /* STORE_RESULTS_TEST_3 */
+    err = DSPPG__Transformations__realDFT_Decomposition__destroy(&decomp);
+    TEST_ASSERT_EQUAL_INT(0, err);
+}
+
+
+
+void DSPPG__Transformations__realDFT_Decomposition__analyse__5(void)
+{
+    int err;
+    DSPPG_DigSignal_FD_t decomp;
+    err = DSPPG__Transformations__realDFT_Decomposition__analyse(&decomp, &sigStump_5, TEST_5_SAMPLE_RATE);
+    TEST_ASSERT_EQUAL_INT(0, err);
+    #ifdef STORE_RESULTS_TEST_5
+    DSPPG__Transformations__realDFT_Decomposition__toJSON(&decomp, TEST_DATA_FILE_STORAGE_PATH);
+    #endif /* STORE_RESULTS_TEST_5 */
     err = DSPPG__Transformations__realDFT_Decomposition__destroy(&decomp);
     TEST_ASSERT_EQUAL_INT(0, err);
 }
@@ -95,9 +167,10 @@ int main(void)
     UNITY_BEGIN();
     
     /* Signals */
-    RUN_TEST(DSPPG__Transformations__realDFT_Decomposition__decompose__1);
-    RUN_TEST(DSPPG__Transformations__realDFT_Decomposition__decompose__2);
-    // RUN_TEST(DSPPG__Transformations__realDFT_Decomposition__decompose__3);
+    RUN_TEST(DSPPG__Transformations__realDFT_Decomposition__analyse__1);
+    RUN_TEST(DSPPG__Transformations__realDFT_Decomposition__analyse__2);
+    RUN_TEST(DSPPG__Transformations__realDFT_Decomposition__analyse__3);
+    RUN_TEST(DSPPG__Transformations__realDFT_Decomposition__analyse__5);
 
     return UNITY_END();
 }

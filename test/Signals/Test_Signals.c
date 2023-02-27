@@ -119,7 +119,7 @@ void test__DSPPG__Signals__DigSignal__generateNoise(void)
     TEST_ASSERT_FLOAT_WITHIN(0.1, mean, cont.mean);
     TEST_ASSERT_FLOAT_WITHIN(0.1, std, cont.std.std);
     #ifdef TEST_PLOTTING
-    char *path1 = "/mnt/c/Users/mbern/Desktop/gplot/";
+    char *path1 = "/mnt/c/Users/mberndt/Desktop/gplot/";
     DSPPG__Signals__DigSignal__toJSON(cont.signal, path1);
     #endif /* TEST_PLOTTING */
     DSPPG__Signals__DigSignal__destroy(cont.signal);

@@ -8,6 +8,8 @@
 
 /* DFT */
 
+#define DSPPG_DFT_FLOAT_DELTA 0.001
+
 
 /**
  * @brief Frequency domain signal
@@ -38,9 +40,12 @@ typedef struct {
  * 
  * 
 */
-int DSPPG__Transformations__realDFT_Decomposition__decompose(DSPPG_DigSignal_FD_t *decomposition, 
-                                                             DSPPG_DigSignal_TD_t *signal,
-                                                             uint32_t samplingRate);
+int DSPPG__Transformations__realDFT_Decomposition__analyse(DSPPG_DigSignal_FD_t *decomposition, 
+                                                           DSPPG_DigSignal_TD_t *signal,
+                                                           uint32_t samplingRate);
+
+
+
 
 
 /**

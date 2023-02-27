@@ -4,9 +4,9 @@
 
 
 
-int DSPPG__Transformations__realDFT_Decomposition__decompose(DSPPG_DigSignal_FD_t *decomposition, 
-                                                             DSPPG_DigSignal_TD_t *signal,
-                                                             uint32_t samplingRate)
+int DSPPG__Transformations__realDFT_Decomposition__analyse(DSPPG_DigSignal_FD_t *decomposition, 
+                                                           DSPPG_DigSignal_TD_t *signal,
+                                                           uint32_t samplingRate)
 {
     int err = 0;
     if(!decomposition || !signal || !signal->data || 0==signal->len){
@@ -53,10 +53,26 @@ int DSPPG__Transformations__realDFT_Decomposition__decompose(DSPPG_DigSignal_FD_
             decomposition->real[m] += ( decomposition->signal->data[n] * cos(2.*M_PI*tmpFac));
             decomposition->imaginary[m] -= ( decomposition->signal->data[n] * sin(2.*M_PI*tmpFac));
         }
+        if(fabs(decomposition->real[m])<DSPPG_DFT_FLOAT_DELTA){
+            decomposition->real[m] = 0.0;
+        }
+        if(fabs(decomposition->imaginary[m])<DSPPG_DFT_FLOAT_DELTA){
+            decomposition->imaginary[m] = 0.0;
+        }
 
         // Calculate magnitude and phase
         decomposition->magnitude[m] = sqrt(decomposition->real[m]*decomposition->real[m]+decomposition->imaginary[m]*decomposition->imaginary[m]);
-        decomposition->phase[m] = atan(decomposition->imaginary[m]/decomposition->real[m]);
+        if(0==decomposition->real[m]){
+            if(0<decomposition->imaginary[m]){
+                decomposition->phase[m] =  90.;
+            }else if(0>decomposition->imaginary[m]){
+                decomposition->phase[m] = -90.;
+            }else{
+                decomposition->phase[m] = 0.;
+            }
+        }else{
+            decomposition->phase[m] = (180./M_PI)*atan(decomposition->imaginary[m]/decomposition->real[m]);
+        }
     }
 
     return err;
@@ -80,6 +96,19 @@ cleanup:
     }
     return err;
 }
+
+
+int DSPPG__Transformations__realDFT_Decomposition__synthetisize(DSPPG_DigSignal_TD_t *signal,
+                                                                DSPPG_DigSignal_FD_t *decomposition,
+                                                                uint32_t samplingRate)
+{
+
+;
+
+
+}
+
+
 
 
 int DSPPG__Transformations__realDFT_Decomposition__destroy(DSPPG_DigSignal_FD_t *decomposition)
@@ -178,9 +207,9 @@ void DSPPG__Transformations__realDFT_Decomposition__toJSON(DSPPG_DigSignal_FD_t 
     /* General */
     cJSON *data = cJSON_CreateObject();
     
-    cJSON_AddStringToObject(data, "plotType", PLOT_TYPE_DECOMPOSITION);
-    cJSON_AddNumberToObject(data, "numComponents", decomposition->numComponents);
-    cJSON_AddNumberToObject(data, "samplingRate", decomposition->samplingRate);
+    cJSON_AddStringToObject(data, "PlotType", PLOT_TYPE_DECOMPOSITION);
+    cJSON_AddNumberToObject(data, "NumComponents", decomposition->numComponents);
+    cJSON_AddNumberToObject(data, "SamplingRate", decomposition->samplingRate);
 
     cJSON *payload = cJSON_CreateObject();
     cJSON_AddItemToObject(data, "Payload", payload);

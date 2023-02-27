@@ -33,9 +33,13 @@ def plotDecomposition(data, outpath):
     y = data["Payload"]["Rectangular"]["Real"]
     n = len(y)
     x = np.linspace(0,n-1,n)  
-    axs[0,1].plot(x,y, marker='o', linestyle = 'None')
-    minimum = math.floor(min(y))-0.5
-    maximum = math.ceil(max(y))+0.5
+    axs[0,1].plot(x,
+                  y, 
+                  marker='o', 
+                  #linestyle = 'None'
+                  )
+    minimum = math.floor(min(y))*1.1
+    maximum = math.ceil(max(y))*1.1
     axs[0,1].set_ylim(minimum, maximum)
     axs[0,1].set_xlabel('Frequency Component')
     axs[0,1].set_ylabel('Real part')
@@ -44,9 +48,13 @@ def plotDecomposition(data, outpath):
     y = data["Payload"]["Rectangular"]["Imaginary"]
     n = len(y)
     x = np.linspace(0,n-1,n)  
-    axs[1,1].plot(x,y, marker='o', linestyle = 'None')
-    minimum = math.floor(min(y))-0.5
-    maximum = math.ceil(max(y))+0.5
+    axs[1,1].plot(x,
+                  y, 
+                  marker='o', 
+                  #linestyle = 'None'
+                  )
+    minimum = math.floor(min(y))*1.1
+    maximum = math.ceil(max(y))*1.1
     axs[1,1].set_ylim(minimum, maximum)
     axs[1,1].set_xlabel('Frequency Component')
     axs[1,1].set_ylabel('Imaginary part')
@@ -55,9 +63,13 @@ def plotDecomposition(data, outpath):
     y = data["Payload"]["Polar"]["Magnitude"]
     n = len(y)
     x = np.linspace(0,n-1,n)  
-    axs[0,0].plot(x,y, marker='o', linestyle = 'None')
-    minimum = math.floor(min(y))-0.5
-    maximum = math.ceil(max(y))+0.5
+    axs[0,0].plot(x,
+                  y, 
+                  marker='o', 
+                  #linestyle = 'None'
+                  )
+    minimum = math.floor(min(y))*1.1
+    maximum = math.ceil(max(y))*1.1
     axs[0,0].set_ylim(minimum, maximum)
     axs[0,0].set_xlabel('Frequency Component')
     axs[0,0].set_ylabel('Magnitude')
@@ -65,13 +77,19 @@ def plotDecomposition(data, outpath):
 
     y = data["Payload"]["Polar"]["Phase"]
     n = len(y)
-    x = np.linspace(0,n-1,n)  
-    axs[1,0].plot(x,y, marker='o', linestyle = 'None')
-    minimum = math.floor(min(y))-0.5
-    maximum = math.ceil(max(y))+0.5
+    x = np.linspace(0,n-1,n)
+    y_ticks = np.linspace(-180, 180, 9)
+    axs[1,0].plot(x,
+                  y, 
+                  marker='o', 
+                  #linestyle = 'None'
+                  )
+    minimum = min(y)*1.1
+    maximum = max(y)*1.1
     axs[1,0].set_ylim(minimum, maximum)
     axs[1,0].set_xlabel('Frequency Component')
-    axs[1,0].set_ylabel('Phase in radean')
+    axs[1,0].set_ylabel('Phase in °')
+    axs[1,0].set_yticks(y_ticks)
     axs[1,0].grid(True)
 
     plt.savefig(outpath)
@@ -90,8 +108,8 @@ def plotSignal(data, outpath):
     n = len(y)
     x = np.linspace(0,n-1,n)  
     axs[0].plot(x,y, marker='.', linestyle = 'None')
-    minimum = math.floor(min(y))-0.5
-    maximum = math.ceil(max(y))+0.5
+    minimum = math.floor(min(y))*1.1
+    maximum = math.ceil(max(y))*1.1
     axs[0].set_ylim(minimum, maximum)
     axs[0].set_xlabel('Sample nummber')
     axs[0].set_ylabel('Value')
