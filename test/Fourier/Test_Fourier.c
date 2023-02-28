@@ -2,19 +2,20 @@
 
 #include "Globals.h"
 #include "unity.h"
-#include "DFT.h"
+#include "Fourier.h"
 
 
 
 #define TEST_DATA_FILE_STORAGE_PATH "/mnt/c/Users/mberndt/Desktop/gplot/"
 
-#define STORE_RESULTS_TEST_5
+#define STORE_RESULTS_TEST_6
 
 DSPPG_DigSignal_TD_t sigStump_1;
 DSPPG_DigSignal_TD_t sigStump_2;
 DSPPG_DigSignal_TD_t sigStump_3;
 // DSPPG_DigSignal_TD_t sigStump_4;
 DSPPG_DigSignal_TD_t sigStump_5;
+DSPPG_DigSignal_TD_t sigStump_6;
 
 
 /* TEST 1 - sin(2*Pi*1Hz) */
@@ -80,6 +81,14 @@ float TEST_3_ARRAY[TEST_3_ARRAY_LENGTH] = {
 float TEST_5_ARRAY[TEST_5_ARRAY_LENGTH] = {0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0};
 
 
+/* TEST 6 - IDFT */
+#define TEST_6_ARRAY_LENGTH 64
+#define TEST_6_SAMPLE_RATE 8 // Hz
+float TEST_6_ARRAY[TEST_6_ARRAY_LENGTH] = {0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0};
+
+
+
+
 
 void setUp(void) 
 {
@@ -106,71 +115,93 @@ void tearDown(void)
     ;
 }
 
-void DSPPG__Transformations__realDFT_Decomposition__analyse__1(void)
+void DSPPG__Fourier__realDFT__analyze__1(void)
 {
     int err;
     DSPPG_DigSignal_FD_t decomp;
-    err = DSPPG__Transformations__realDFT_Decomposition__analyse(&decomp, &sigStump_1, TEST_1_SAMPLE_RATE);
+    err = DSPPG__Fourier__realDFT__analyze(&decomp, &sigStump_1, TEST_1_SAMPLE_RATE);
     TEST_ASSERT_EQUAL_INT(0, err);
     #ifdef STORE_RESULTS_TEST_1
-    DSPPG__Transformations__realDFT_Decomposition__toJSON(&decomp, TEST_DATA_FILE_STORAGE_PATH);
+    DSPPG__Signals__DigSignal__toJSON(&sigStump_1, TEST_DATA_FILE_STORAGE_PATH);
+    DSPPG__Fourier__realDFT__toJSON(&decomp, TEST_DATA_FILE_STORAGE_PATH);
     #endif /* STORE_RESULTS_TEST_1 */
-    err = DSPPG__Transformations__realDFT_Decomposition__destroy(&decomp);
+    err = DSPPG__Fourier__realDFT__destroy(&decomp);
     TEST_ASSERT_EQUAL_INT(0, err);
     
 }
 
-void DSPPG__Transformations__realDFT_Decomposition__analyse__2(void)
+void DSPPG__Fourier__realDFT__analyze__2(void)
 {
     int err;
     DSPPG_DigSignal_FD_t decomp;
-    err = DSPPG__Transformations__realDFT_Decomposition__analyse(&decomp, &sigStump_2, TEST_2_SAMPLE_RATE);
+    err = DSPPG__Fourier__realDFT__analyze(&decomp, &sigStump_2, TEST_2_SAMPLE_RATE);
     TEST_ASSERT_EQUAL_INT(0, err);
     #ifdef STORE_RESULTS_TEST_2
-    DSPPG__Transformations__realDFT_Decomposition__toJSON(&decomp, TEST_DATA_FILE_STORAGE_PATH);
+    DSPPG__Signals__DigSignal__toJSON(&sigStump_1, TEST_DATA_FILE_STORAGE_PATH);
+    DSPPG__Fourier__realDFT__toJSON(&decomp, TEST_DATA_FILE_STORAGE_PATH);
     #endif /* STORE_RESULTS_TEST_2 */
-    err = DSPPG__Transformations__realDFT_Decomposition__destroy(&decomp);
+    err = DSPPG__Fourier__realDFT__destroy(&decomp);
     TEST_ASSERT_EQUAL_INT(0, err);
 }
 
-void DSPPG__Transformations__realDFT_Decomposition__analyse__3(void)
+void DSPPG__Fourier__realDFT__analyze__3(void)
 {
     int err;
     DSPPG_DigSignal_FD_t decomp;
-    err = DSPPG__Transformations__realDFT_Decomposition__analyse(&decomp, &sigStump_3, TEST_3_SAMPLE_RATE);
+    err = DSPPG__Fourier__realDFT__analyze(&decomp, &sigStump_3, TEST_3_SAMPLE_RATE);
     TEST_ASSERT_EQUAL_INT(0, err);
     #ifdef STORE_RESULTS_TEST_3
-    DSPPG__Transformations__realDFT_Decomposition__toJSON(&decomp, TEST_DATA_FILE_STORAGE_PATH);
+    DSPPG__Fourier__realDFT__toJSON(&decomp, TEST_DATA_FILE_STORAGE_PATH);
     #endif /* STORE_RESULTS_TEST_3 */
-    err = DSPPG__Transformations__realDFT_Decomposition__destroy(&decomp);
+    err = DSPPG__Fourier__realDFT__destroy(&decomp);
     TEST_ASSERT_EQUAL_INT(0, err);
 }
 
 
 
-void DSPPG__Transformations__realDFT_Decomposition__analyse__5(void)
+void DSPPG__Fourier__realDFT__analyze__5(void)
 {
     int err;
     DSPPG_DigSignal_FD_t decomp;
-    err = DSPPG__Transformations__realDFT_Decomposition__analyse(&decomp, &sigStump_5, TEST_5_SAMPLE_RATE);
+    err = DSPPG__Fourier__realDFT__analyze(&decomp, &sigStump_5, TEST_5_SAMPLE_RATE);
     TEST_ASSERT_EQUAL_INT(0, err);
     #ifdef STORE_RESULTS_TEST_5
-    DSPPG__Transformations__realDFT_Decomposition__toJSON(&decomp, TEST_DATA_FILE_STORAGE_PATH);
+    DSPPG__Fourier__realDFT__toJSON(&decomp, TEST_DATA_FILE_STORAGE_PATH);
     #endif /* STORE_RESULTS_TEST_5 */
-    err = DSPPG__Transformations__realDFT_Decomposition__destroy(&decomp);
+    err = DSPPG__Fourier__realDFT__destroy(&decomp);
     TEST_ASSERT_EQUAL_INT(0, err);
 }
 
+
+void DSPPG__Fourier__realDFT__synthesize__6(void)
+{
+    int err;
+    DSPPG_DigSignal_FD_t decomp;
+    err = DSPPG__Fourier__realDFT__analyze(&decomp, &sigStump_5, TEST_5_SAMPLE_RATE);
+    TEST_ASSERT_EQUAL_INT(0, err);
+    DSPPG_DigSignal_TD_t syntSig;
+    memset(&syntSig, 0, sizeof syntSig);
+    err = DSPPG__Fourier__realDFT__synthesize(&syntSig, &decomp);
+    TEST_ASSERT_EQUAL_INT(0, err);
+    #ifdef STORE_RESULTS_TEST_6
+    DSPPG__Signals__DigSignal__toJSON(&syntSig, TEST_DATA_FILE_STORAGE_PATH);
+    #endif /* STORE_RESULTS_TEST_6 */
+    err = DSPPG__Fourier__realDFT__destroy(&decomp);
+    TEST_ASSERT_EQUAL_INT(0, err);
+}
 
 int main(void) 
 {
     UNITY_BEGIN();
     
-    /* Signals */
-    RUN_TEST(DSPPG__Transformations__realDFT_Decomposition__analyse__1);
-    RUN_TEST(DSPPG__Transformations__realDFT_Decomposition__analyse__2);
-    RUN_TEST(DSPPG__Transformations__realDFT_Decomposition__analyse__3);
-    RUN_TEST(DSPPG__Transformations__realDFT_Decomposition__analyse__5);
+    /* Fourier */
+    RUN_TEST(DSPPG__Fourier__realDFT__analyze__1);
+    RUN_TEST(DSPPG__Fourier__realDFT__analyze__2);
+    RUN_TEST(DSPPG__Fourier__realDFT__analyze__3);
+    RUN_TEST(DSPPG__Fourier__realDFT__analyze__5);
+
+    /* IFourier */
+    RUN_TEST(DSPPG__Fourier__realDFT__synthesize__6);
 
     return UNITY_END();
 }

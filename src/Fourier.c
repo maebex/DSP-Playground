@@ -1,12 +1,12 @@
 
-#include "DFT.h"
+#include "Fourier.h"
 
 
+/* Real DFT */
 
-
-int DSPPG__Transformations__realDFT_Decomposition__analyse(DSPPG_DigSignal_FD_t *decomposition, 
-                                                           DSPPG_DigSignal_TD_t *signal,
-                                                           uint32_t samplingRate)
+int DSPPG__Fourier__realDFT__analyze(DSPPG_DigSignal_FD_t *decomposition, 
+                                     DSPPG_DigSignal_TD_t *signal,
+                                     uint32_t samplingRate)
 {
     int err = 0;
     if(!decomposition || !signal || !signal->data || 0==signal->len){
@@ -98,20 +98,43 @@ cleanup:
 }
 
 
-int DSPPG__Transformations__realDFT_Decomposition__synthetisize(DSPPG_DigSignal_TD_t *signal,
-                                                                DSPPG_DigSignal_FD_t *decomposition,
-                                                                uint32_t samplingRate)
+int DSPPG__Fourier__realDFT__synthesize(DSPPG_DigSignal_TD_t *signal,
+                                                      DSPPG_DigSignal_FD_t *decomposition)
 {
+    int err = 0;
+    if(!decomposition || !signal || !decomposition->real || !decomposition->imaginary || 0==decomposition->numComponents){
+        err = EFAULT;
+        log_error("%s %d", __FUNCTION__, err);
+        return err;
+    }
 
-;
+    signal->len = decomposition->numComponents;
+    // allocate memory for samples
+    signal->data = calloc(signal->len, sizeof *(signal->data));
+    if(!signal->data){
+        err = ENOMEM;
+        log_error("%s %d", __FUNCTION__, err);
+        return err;
+    }
 
+    float tmpFac;
+    double tmpAcc;
+    for(int n=0; n<signal->len; n++){
+        tmpAcc = 0.0;
+        for(int m=0; m<decomposition->numComponents; m++){
+        	tmpFac = (float)n*(float)m/(float)signal->len;
+            tmpAcc += (decomposition->real[m]*cos(2.*M_PI*tmpFac)) + (decomposition->imaginary[m]*sin(2.*M_PI*tmpFac));
+        }
+        signal->data[n] = tmpAcc / signal->len;
+    }
 
+    return 0;
 }
 
 
 
 
-int DSPPG__Transformations__realDFT_Decomposition__destroy(DSPPG_DigSignal_FD_t *decomposition)
+int DSPPG__Fourier__realDFT__destroy(DSPPG_DigSignal_FD_t *decomposition)
 {
     int err = 0;
     if(!decomposition){
@@ -139,7 +162,7 @@ int DSPPG__Transformations__realDFT_Decomposition__destroy(DSPPG_DigSignal_FD_t 
 }
 
 
-int DSPPG__Transformations__realDFT_Decomposition__printRect(DSPPG_DigSignal_FD_t *decomposition)
+int DSPPG__Fourier__realDFT__printRect(DSPPG_DigSignal_FD_t *decomposition)
 {
     int err = 0;
     if(!decomposition || !decomposition->real || !decomposition->imaginary){
@@ -162,7 +185,7 @@ int DSPPG__Transformations__realDFT_Decomposition__printRect(DSPPG_DigSignal_FD_
 
 }
 
-int DSPPG__Transformations__realDFT_Decomposition__printPolar(DSPPG_DigSignal_FD_t *decomposition)
+int DSPPG__Fourier__realDFT__printPolar(DSPPG_DigSignal_FD_t *decomposition)
 {
     int err = 0;
     if(!decomposition || !decomposition->real || !decomposition->imaginary){
@@ -186,8 +209,8 @@ int DSPPG__Transformations__realDFT_Decomposition__printPolar(DSPPG_DigSignal_FD
 }
 
 
-void DSPPG__Transformations__realDFT_Decomposition__toJSON(DSPPG_DigSignal_FD_t *decomposition,
-                                                           const char * const path)
+void DSPPG__Fourier__realDFT__toJSON(DSPPG_DigSignal_FD_t *decomposition,
+                                     const char * const path)
 {
     if(!path || !decomposition){
         log_error("%s %d", __FUNCTION__, EFAULT);
@@ -256,3 +279,5 @@ void DSPPG__Transformations__realDFT_Decomposition__toJSON(DSPPG_DigSignal_FD_t 
 }
 
 
+
+/* FFT */

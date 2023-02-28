@@ -3,7 +3,7 @@
 #include "Signals.h"
 #include "Statistics.h"
 
-#define TEST_PLOTTING
+// #define TEST_PLOTTING
 
 void setUp(void) 
 {

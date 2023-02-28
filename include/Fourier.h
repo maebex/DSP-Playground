@@ -27,9 +27,11 @@ typedef struct {
 }DSPPG_DigSignal_FD_t;
 
 
+/* Real DFT */
+
 
 /**
- * @brief
+ * @brief Decompose a signal into its frequency components via DFT
  * 
  * @param[out] decomposition contains the signal and the signal components after performing DFT
  * @param[in] signal discrete signal
@@ -40,31 +42,40 @@ typedef struct {
  * 
  * 
 */
-int DSPPG__Transformations__realDFT_Decomposition__analyse(DSPPG_DigSignal_FD_t *decomposition, 
-                                                           DSPPG_DigSignal_TD_t *signal,
-                                                           uint32_t samplingRate);
+int DSPPG__Fourier__realDFT__analyze(DSPPG_DigSignal_FD_t *decomposition, 
+                                     DSPPG_DigSignal_TD_t *signal,
+                                     uint32_t samplingRate);
 
-
-
-
+/**
+ * @brief Compose a signal from its frquency components via Inverse DFT
+ *
+ * @param[out] signal discrete signal
+ * @param[in] decomposition contains the signal and the signal components before performing IDFT
+ * 
+ * @return ENOMEM if memory error,
+ *         0 else
+ *
+*/
+int DSPPG__Fourier__realDFT__synthesize(DSPPG_DigSignal_TD_t *signal,
+                                        DSPPG_DigSignal_FD_t *decomposition);
 
 /**
  * 
  * 
 */
-int DSPPG__Transformations__realDFT_Decomposition__destroy(DSPPG_DigSignal_FD_t *decomposition);
+int DSPPG__Fourier__realDFT__destroy(DSPPG_DigSignal_FD_t *decomposition);
 
 /**
  * @brief Print Real and Imaginary part
  * 
 */
-int DSPPG__Transformations__realDFT_Decomposition__printRect(DSPPG_DigSignal_FD_t *decomposition);
+int DSPPG__Fourier__realDFT__printRect(DSPPG_DigSignal_FD_t *decomposition);
 
 /**
  * @brief Print Magnitude and Phase (in Radian)
  * 
 */
-int DSPPG__Transformations__realDFT_Decomposition__printPolar(DSPPG_DigSignal_FD_t *decomposition);
+int DSPPG__Fourier__realDFT__printPolar(DSPPG_DigSignal_FD_t *decomposition);
 
 /**
  * @brief Store data to JSON file
@@ -75,8 +86,13 @@ int DSPPG__Transformations__realDFT_Decomposition__printPolar(DSPPG_DigSignal_FD
  * @details The data can be fed into tools/DSPPG_Plot.py as input file 
  * 
 */
-void DSPPG__Transformations__realDFT_Decomposition__toJSON(DSPPG_DigSignal_FD_t *decomposition,
-                                                           const char * const path);
+void DSPPG__Fourier__realDFT__toJSON(DSPPG_DigSignal_FD_t *decomposition,
+                                     const char * const path);
+
+
+
+
+/* FFT */
 
 
 

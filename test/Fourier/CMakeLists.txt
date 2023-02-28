@@ -1,7 +1,7 @@
 
-set(TEST_NAME DSPPSG_DFT_Test)
+set(TEST_NAME DSPPSG_Fourier_Test)
 add_executable (${TEST_NAME}
-                Test_DFT.c
+                Test_Fourier.c
                 ) 
 
 target_include_directories(${TEST_NAME}
