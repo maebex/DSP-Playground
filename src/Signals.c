@@ -4,7 +4,8 @@
 
 int DSPPG__Signals__DigSignal__setData(DSPPG_DigSignal_TD_t *sig, 
                                        size_t len,
-                                       DSPPG_DigSignal_payloadType_t *data)
+                                       DSPPG_DigSignal_payloadType_t *data,
+                                       int32_t *sampleNum)
 {
     if(!sig){
         int err = EFAULT;
@@ -18,7 +19,8 @@ int DSPPG__Signals__DigSignal__setData(DSPPG_DigSignal_TD_t *sig,
         sig->len = len;
         sig->data = data;
     }
-    sig->sampleNum = NULL; // TODO
+    sig->sampleNum = sampleNum;
+
     return 0;
 }
 
@@ -133,7 +135,8 @@ void DSPPG__Signals__DigSignal__destroy(DSPPG_DigSignal_TD_t *sig)
 int DSPPG__Signals__DigSignal__generateNoise(DSPPG_DigSignal_TD_t *out,
                                              float mean, 
                                              float std,
-                                             size_t len)
+                                             size_t len,
+                                             int32_t *sampleNum)
 {
     int err = 0;
     // Number of values added, has to be even - increase for better distribution resolution
@@ -162,7 +165,7 @@ int DSPPG__Signals__DigSignal__generateNoise(DSPPG_DigSignal_TD_t *out,
         out->data[i] *= std;
         out->data[i] += mean;
     }
-    out->sampleNum = NULL; // TODO
+    out->sampleNum = sampleNum;
 
     return err;
 }

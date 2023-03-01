@@ -37,7 +37,8 @@ typedef struct {
 */
 int DSPPG__Signals__DigSignal__setData(DSPPG_DigSignal_TD_t *sig, 
                                        size_t len,
-                                       DSPPG_DigSignal_payloadType_t *data);
+                                       DSPPG_DigSignal_payloadType_t *data,
+                                       int32_t *sampleNum);
 
 
 
@@ -120,7 +121,8 @@ void DSPPG__Signals__DigSignal__destroy(DSPPG_DigSignal_TD_t *sig);
 int DSPPG__Signals__DigSignal__generateNoise(DSPPG_DigSignal_TD_t *out,
                                              float mean, 
                                              float std,
-                                             size_t len);
+                                             size_t len, 
+                                             int32_t *sampleNum);
 
 
 

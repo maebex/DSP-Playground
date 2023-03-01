@@ -12,3 +12,39 @@ float DSPPG__Helpers__genRand(float max)
     return (float)rand()/(float)(RAND_MAX/max);
 }
 
+
+int croundf(double complex *z, double delta)
+{
+    int err = 0;
+    if(!*z){
+        err = EFAULT;
+        log_error("%s %d", __FUNCTION__, err);
+        return err;
+    }
+
+    double re = creal(*z);
+    double im = cimag(*z);
+    double re2 = (double)4.4408920985006262e-16;
+
+    // if((creal(*z) < 0.0) && (creal(*z) > (-1.*abs(delta)))){
+    //     *z -= creal(*z);
+    // }else if ((creal(*z) > 0.0) && (creal(*z) < abs(delta))){
+    //     *z -= creal(*z);
+    // }
+
+    if((creal(*z) < 0.0) && (creal(*z) > (-1.*fabs(delta)))){
+        *z -= creal(*z);
+    }else if ((creal(*z) > 0.0) ){
+        if((creal(*z) < fabs(delta))){
+            *z -= creal(*z);
+        }
+    }
+
+    if((cimag(*z) < 0.0) && (cimag(*z) > (-1.*fabs(delta)))){
+        *z -= I*cimag(*z);
+    }else if ((cimag(*z) > 0.0) && (cimag(*z) < fabs(delta))){
+        *z -= I*cimag(*z);
+    }
+
+    return err;
+}

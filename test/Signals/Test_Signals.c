@@ -23,7 +23,7 @@ void test__DSPPG__Signals__DigSignal__setData(void)
 {
     DSPPG_DigSignal_TD_t signal;
     memset(&signal, 0, sizeof signal);
-    int err = DSPPG__Signals__DigSignal__setData(&signal, 0, NULL);
+    int err = DSPPG__Signals__DigSignal__setData(&signal, 0, NULL, NULL);
     TEST_ASSERT_EQUAL_INT(0, err);
 }
 
@@ -41,7 +41,7 @@ void test__DSPPG__Signals__DigSignal__convolute_Random(void)
     data_in[2] = 2;
     data_in[3] = -76;
     data_in[4] = 6;
-    err = DSPPG__Signals__DigSignal__setData(&in, IN_SIZE, data_in);
+    err = DSPPG__Signals__DigSignal__setData(&in, IN_SIZE, data_in, NULL);
     TEST_ASSERT_EQUAL_INT(0, err);
 
     // Filter IR
@@ -51,7 +51,7 @@ void test__DSPPG__Signals__DigSignal__convolute_Random(void)
     data_filter[0] = 17;
     data_filter[1] = 69;
     data_filter[2] = 42;
-    err = DSPPG__Signals__DigSignal__setData(&filter, FILTER_SIZE, data_filter);
+    err = DSPPG__Signals__DigSignal__setData(&filter, FILTER_SIZE, data_filter, NULL);
     TEST_ASSERT_EQUAL_INT(0, err);
 
     // Result
@@ -65,7 +65,7 @@ void test__DSPPG__Signals__DigSignal__convolute_Random(void)
     data_result[4] = -5058;
     data_result[5] = -2778;
     data_result[6] = 252;
-    err = DSPPG__Signals__DigSignal__setData(&result, RESULT_SIZE, data_result);
+    err = DSPPG__Signals__DigSignal__setData(&result, RESULT_SIZE, data_result, NULL);
     TEST_ASSERT_EQUAL_INT(0, err);
 
     // Convolution - Inside algorithm
@@ -108,7 +108,7 @@ void test__DSPPG__Signals__DigSignal__generateNoise(void)
     mean = 0;
     std = 15;
     numSamps = 100000;
-    err = DSPPG__Signals__DigSignal__generateNoise(&noise, mean, std, numSamps);
+    err = DSPPG__Signals__DigSignal__generateNoise(&noise, mean, std, numSamps, NULL);
     TEST_ASSERT_EQUAL_INT(0, err);
     err = DSPPG__Statistics__StatCont__setSignal(&cont, &noise);
     TEST_ASSERT_EQUAL_INT(0, err);

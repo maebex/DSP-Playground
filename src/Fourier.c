@@ -21,13 +21,8 @@ int DSPPG__Fourier__realDFT__analyze(DSPPG_DigSignal_FD_t *decomposition,
     decomposition->samplingRate = samplingRate;
 
     // allocate memory for DFT components
-    decomposition->real = calloc(len, sizeof *(decomposition->real));
-    if(!decomposition->real){
-        err = ENOMEM;
-        log_error("%s %d", __FUNCTION__, err);
-    }
-    decomposition->imaginary = calloc(len, sizeof *(decomposition->imaginary));
-    if(!decomposition->imaginary){
+    decomposition->cvalue = calloc(len, sizeof *(decomposition->cvalue));
+    if(!decomposition->cvalue){
         err = ENOMEM;
         log_error("%s %d", __FUNCTION__, err);
         goto cleanup;
@@ -46,46 +41,29 @@ int DSPPG__Fourier__realDFT__analyze(DSPPG_DigSignal_FD_t *decomposition,
     }
 
     // Perform decomposition
-    float tmpFac;
+    double tmpFac;
+    double complex ctemp;
     for(int m=0; m<decomposition->numComponents; m++){ // frequency components
         for(int n=0; n<decomposition->numComponents; n++){  // samples
-        	tmpFac = (float)n*(float)m/(float)decomposition->numComponents;
-            decomposition->real[m] += ( decomposition->signal->data[n] * cos(2.*M_PI*tmpFac));
-            decomposition->imaginary[m] -= ( decomposition->signal->data[n] * sin(2.*M_PI*tmpFac));
+        	tmpFac = (double)n*(double)m/(double)decomposition->numComponents;
+            ctemp = cos(2.*M_PI*tmpFac) - sin(2.*M_PI*tmpFac)*I;
+            decomposition->cvalue[m] += (decomposition->signal->data[n] * ctemp);
         }
-        if(fabs(decomposition->real[m])<DSPPG_DFT_FLOAT_DELTA){
-            decomposition->real[m] = 0.0;
-        }
-        if(fabs(decomposition->imaginary[m])<DSPPG_DFT_FLOAT_DELTA){
-            decomposition->imaginary[m] = 0.0;
-        }
+
+        // Round
+        err = croundf(&(decomposition->cvalue[m]), DSPPG_DFT_DOUBLE_DELTA);
 
         // Calculate magnitude and phase
-        decomposition->magnitude[m] = sqrt(decomposition->real[m]*decomposition->real[m]+decomposition->imaginary[m]*decomposition->imaginary[m]);
-        if(0==decomposition->real[m]){
-            if(0<decomposition->imaginary[m]){
-                decomposition->phase[m] =  90.;
-            }else if(0>decomposition->imaginary[m]){
-                decomposition->phase[m] = -90.;
-            }else{
-                decomposition->phase[m] = 0.;
-            }
-        }else{
-            decomposition->phase[m] = (180./M_PI)*atan(decomposition->imaginary[m]/decomposition->real[m]);
-        }
+        decomposition->magnitude[m] = cabs(decomposition->cvalue[m]);
+        decomposition->phase[m] = carg(decomposition->cvalue[m]);
+        double re = creal(decomposition->cvalue[m]);
+        double im = cimag(decomposition->cvalue[m]);
+        double res = decomposition->phase[m];
     }
-
     return err;
 
 cleanup: 
-    if(decomposition->real){
-        free(decomposition->real);
-        decomposition->real = NULL;
-    }
-    if(decomposition->imaginary){
-        free(decomposition->imaginary);
-        decomposition->imaginary = NULL;
-    }
+
     if(decomposition->magnitude){
         free(decomposition->magnitude);
         decomposition->magnitude = NULL;
@@ -99,10 +77,10 @@ cleanup:
 
 
 int DSPPG__Fourier__realDFT__synthesize(DSPPG_DigSignal_TD_t *signal,
-                                                      DSPPG_DigSignal_FD_t *decomposition)
+                                        DSPPG_DigSignal_FD_t *decomposition)
 {
     int err = 0;
-    if(!decomposition || !signal || !decomposition->real || !decomposition->imaginary || 0==decomposition->numComponents){
+    if(!decomposition || !signal || !decomposition->cvalue || 0==decomposition->numComponents){
         err = EFAULT;
         log_error("%s %d", __FUNCTION__, err);
         return err;
@@ -117,13 +95,13 @@ int DSPPG__Fourier__realDFT__synthesize(DSPPG_DigSignal_TD_t *signal,
         return err;
     }
 
-    float tmpFac;
+    double tmpFac;
     double tmpAcc;
     for(int n=0; n<signal->len; n++){
         tmpAcc = 0.0;
         for(int m=0; m<decomposition->numComponents; m++){
-        	tmpFac = (float)n*(float)m/(float)signal->len;
-            tmpAcc += (decomposition->real[m]*cos(2.*M_PI*tmpFac)) + (decomposition->imaginary[m]*sin(2.*M_PI*tmpFac));
+        	tmpFac = (double)n*(double)m/(double)signal->len;
+            tmpAcc += (creal(decomposition->cvalue[m])*cos(2.*M_PI*tmpFac)) + (cimag(decomposition->cvalue[m])*sin(2.*M_PI*tmpFac));
         }
         signal->data[n] = tmpAcc / signal->len;
     }
@@ -142,13 +120,9 @@ int DSPPG__Fourier__realDFT__destroy(DSPPG_DigSignal_FD_t *decomposition)
         log_error("%s %d", __FUNCTION__, err);
         return err;
     }
-    if(decomposition->real){
-        free(decomposition->real);
-        decomposition->real = NULL;
-    }
-    if(decomposition->imaginary){
-        free(decomposition->imaginary);
-        decomposition->imaginary = NULL;
+    if(decomposition->cvalue){
+        free(decomposition->cvalue);
+        decomposition->cvalue = NULL;
     }
     if(decomposition->magnitude){
         free(decomposition->magnitude);
@@ -165,7 +139,7 @@ int DSPPG__Fourier__realDFT__destroy(DSPPG_DigSignal_FD_t *decomposition)
 int DSPPG__Fourier__realDFT__printRect(DSPPG_DigSignal_FD_t *decomposition)
 {
     int err = 0;
-    if(!decomposition || !decomposition->real || !decomposition->imaginary){
+    if(!decomposition || !decomposition->cvalue){
         err = EFAULT;
         log_error("%s %d", __FUNCTION__, err);
         return err;
@@ -173,11 +147,11 @@ int DSPPG__Fourier__realDFT__printRect(DSPPG_DigSignal_FD_t *decomposition)
 
     printf("\nRe:\t");
     for (int i=0; i<decomposition->numComponents; i++){
-        printf("%d:%f\t|\t", i, decomposition->real[i]);
+        printf("%d:%f\t|\t", i, creal(decomposition->cvalue[i]));
     }
     printf("\nIm:\t");
     for (int i=0; i<decomposition->numComponents; i++){
-        printf("%d:%f\t|\t", i, decomposition->imaginary[i]);
+        printf("%d:%f\t|\t", i, cimag(decomposition->cvalue[i]));
     }
     printf("\n\n");
 
@@ -188,7 +162,7 @@ int DSPPG__Fourier__realDFT__printRect(DSPPG_DigSignal_FD_t *decomposition)
 int DSPPG__Fourier__realDFT__printPolar(DSPPG_DigSignal_FD_t *decomposition)
 {
     int err = 0;
-    if(!decomposition || !decomposition->real || !decomposition->imaginary){
+    if(!decomposition || !decomposition->cvalue){
         err = EFAULT;
         log_error("%s %d", __FUNCTION__, err);
         return err;
@@ -227,6 +201,14 @@ void DSPPG__Fourier__realDFT__toJSON(DSPPG_DigSignal_FD_t *decomposition,
     memcpy(fullPathName, path, pathLen);
     strcat(fullPathName, fname);
 
+    //to store to JSON we first put the real and imaginary parts into separated arrays
+    double rearr[decomposition->numComponents];
+    double imarr[decomposition->numComponents];
+    for(int i=0; i<decomposition->numComponents; i++){
+        rearr[i] =  creal(decomposition->cvalue[i]);
+        imarr[i] =  cimag(decomposition->cvalue[i]);
+    }
+
     /* General */
     cJSON *data = cJSON_CreateObject();
     
@@ -240,10 +222,10 @@ void DSPPG__Fourier__realDFT__toJSON(DSPPG_DigSignal_FD_t *decomposition,
     /* Rectangular */
     cJSON *rectangular = cJSON_CreateObject();
 
-    cJSON *real = cJSON_CreateFloatArray(decomposition->real, decomposition->numComponents);
+    cJSON *real = cJSON_CreateDoubleArray(rearr, decomposition->numComponents);
     cJSON_AddItemToObject(rectangular, "Real", real);
 
-    cJSON *imaginary = cJSON_CreateFloatArray(decomposition->imaginary, decomposition->numComponents);
+    cJSON *imaginary = cJSON_CreateDoubleArray(imarr, decomposition->numComponents);
     cJSON_AddItemToObject(rectangular, "Imaginary", imaginary);
 
     cJSON_AddItemToObject(payload, "Rectangular", rectangular);

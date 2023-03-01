@@ -5,10 +5,11 @@
 #include "Fourier.h"
 
 
-
+// Set this to adjust the directory where test results are stored
 #define TEST_DATA_FILE_STORAGE_PATH "/mnt/c/Users/mberndt/Desktop/gplot/"
 
-#define STORE_RESULTS_TEST_6
+// Set this to adjust the test results that are stored
+#define STORE_RESULTS_TEST_5
 
 DSPPG_DigSignal_TD_t sigStump_1;
 DSPPG_DigSignal_TD_t sigStump_2;
@@ -78,13 +79,27 @@ float TEST_3_ARRAY[TEST_3_ARRAY_LENGTH] = {
 /* TEST 5 - Rectangular window */
 #define TEST_5_ARRAY_LENGTH 64
 #define TEST_5_SAMPLE_RATE 8 // Hz
-float TEST_5_ARRAY[TEST_5_ARRAY_LENGTH] = {0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0};
+float TEST_5_ARRAY[TEST_5_ARRAY_LENGTH] = {0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 
+                                           0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 
+                                           0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 
+                                           1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 
+                                           1.0, 
+                                           0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 
+                                           0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 
+                                           0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0};
 
 
 /* TEST 6 - IDFT */
 #define TEST_6_ARRAY_LENGTH 64
 #define TEST_6_SAMPLE_RATE 8 // Hz
-float TEST_6_ARRAY[TEST_6_ARRAY_LENGTH] = {0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0};
+float TEST_6_ARRAY[TEST_6_ARRAY_LENGTH] = {0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 
+                                           0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 
+                                           0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 
+                                           1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 
+                                           1.0, 
+                                           0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 
+                                           0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 
+                                           0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0};
 
 
 
@@ -94,17 +109,17 @@ void setUp(void)
 {
     int err;
     
-    err = DSPPG__Signals__DigSignal__setData(&sigStump_1, TEST_1_ARRAY_LENGTH, TEST_1_ARRAY);
+    err = DSPPG__Signals__DigSignal__setData(&sigStump_1, TEST_1_ARRAY_LENGTH, TEST_1_ARRAY, NULL);
     TEST_ASSERT_EQUAL_INT(0, err);
 
-    err = DSPPG__Signals__DigSignal__setData(&sigStump_2, TEST_2_ARRAY_LENGTH, TEST_2_ARRAY);
+    err = DSPPG__Signals__DigSignal__setData(&sigStump_2, TEST_2_ARRAY_LENGTH, TEST_2_ARRAY, NULL);
     TEST_ASSERT_EQUAL_INT(0, err);
 
-    err = DSPPG__Signals__DigSignal__setData(&sigStump_3, TEST_3_ARRAY_LENGTH, TEST_3_ARRAY);
+    err = DSPPG__Signals__DigSignal__setData(&sigStump_3, TEST_3_ARRAY_LENGTH, TEST_3_ARRAY, NULL);
     TEST_ASSERT_EQUAL_INT(0, err);
 
 
-    err = DSPPG__Signals__DigSignal__setData(&sigStump_5, TEST_5_ARRAY_LENGTH, TEST_5_ARRAY);
+    err = DSPPG__Signals__DigSignal__setData(&sigStump_5, TEST_5_ARRAY_LENGTH, TEST_5_ARRAY, NULL);
     TEST_ASSERT_EQUAL_INT(0, err);
 
 }
@@ -137,7 +152,7 @@ void DSPPG__Fourier__realDFT__analyze__2(void)
     err = DSPPG__Fourier__realDFT__analyze(&decomp, &sigStump_2, TEST_2_SAMPLE_RATE);
     TEST_ASSERT_EQUAL_INT(0, err);
     #ifdef STORE_RESULTS_TEST_2
-    DSPPG__Signals__DigSignal__toJSON(&sigStump_1, TEST_DATA_FILE_STORAGE_PATH);
+    DSPPG__Signals__DigSignal__toJSON(&sigStump_2, TEST_DATA_FILE_STORAGE_PATH);
     DSPPG__Fourier__realDFT__toJSON(&decomp, TEST_DATA_FILE_STORAGE_PATH);
     #endif /* STORE_RESULTS_TEST_2 */
     err = DSPPG__Fourier__realDFT__destroy(&decomp);
@@ -151,6 +166,7 @@ void DSPPG__Fourier__realDFT__analyze__3(void)
     err = DSPPG__Fourier__realDFT__analyze(&decomp, &sigStump_3, TEST_3_SAMPLE_RATE);
     TEST_ASSERT_EQUAL_INT(0, err);
     #ifdef STORE_RESULTS_TEST_3
+    DSPPG__Signals__DigSignal__toJSON(&sigStump_3, TEST_DATA_FILE_STORAGE_PATH);
     DSPPG__Fourier__realDFT__toJSON(&decomp, TEST_DATA_FILE_STORAGE_PATH);
     #endif /* STORE_RESULTS_TEST_3 */
     err = DSPPG__Fourier__realDFT__destroy(&decomp);
@@ -166,6 +182,7 @@ void DSPPG__Fourier__realDFT__analyze__5(void)
     err = DSPPG__Fourier__realDFT__analyze(&decomp, &sigStump_5, TEST_5_SAMPLE_RATE);
     TEST_ASSERT_EQUAL_INT(0, err);
     #ifdef STORE_RESULTS_TEST_5
+    DSPPG__Signals__DigSignal__toJSON(&sigStump_5, TEST_DATA_FILE_STORAGE_PATH);
     DSPPG__Fourier__realDFT__toJSON(&decomp, TEST_DATA_FILE_STORAGE_PATH);
     #endif /* STORE_RESULTS_TEST_5 */
     err = DSPPG__Fourier__realDFT__destroy(&decomp);

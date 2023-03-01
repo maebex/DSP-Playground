@@ -88,8 +88,8 @@ def plotDecomposition(data, outpath):
     maximum = max(y)*1.1
     axs[1,0].set_ylim(minimum, maximum)
     axs[1,0].set_xlabel('Frequency Component')
-    axs[1,0].set_ylabel('Phase in °')
-    axs[1,0].set_yticks(y_ticks)
+    axs[1,0].set_ylabel('Phase in rad')
+    # axs[1,0].set_yticks(y_ticks)
     axs[1,0].grid(True)
 
     plt.savefig(outpath)
@@ -107,7 +107,11 @@ def plotSignal(data, outpath):
     y = data["SampleData"]
     n = len(y)
     x = np.linspace(0,n-1,n)  
-    axs[0].plot(x,y, marker='.', linestyle = 'None')
+    axs[0].plot(x,
+                y, 
+                marker='.', 
+                #linestyle = 'None'
+                )
     minimum = math.floor(min(y))*1.1
     maximum = math.ceil(max(y))*1.1
     axs[0].set_ylim(minimum, maximum)

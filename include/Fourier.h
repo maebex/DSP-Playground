@@ -5,11 +5,10 @@
 #include "Signals.h"
 
 
+#if defined __STDC_IEC_559_COMPLEX__ || __STDC_IEC_60559_COMPLEX__
+
 
 /* DFT */
-
-#define DSPPG_DFT_FLOAT_DELTA 0.001
-
 
 /**
  * @brief Frequency domain signal
@@ -19,8 +18,9 @@
 typedef struct {
     DSPPG_DigSignal_TD_t *signal;
     size_t numComponents;
-    float *real;
-    float *imaginary;
+    // float *real;
+    // float *imaginary;
+    double complex *cvalue;
     float *magnitude;
     float *phase;
     uint32_t samplingRate;
@@ -94,7 +94,6 @@ void DSPPG__Fourier__realDFT__toJSON(DSPPG_DigSignal_FD_t *decomposition,
 
 /* FFT */
 
-
-
+#endif /* __STDC_IEC_559_COMPLEX__ || __STDC_IEC_60559_COMPLEX__ */
 
 #endif /* A36BA74E_3F68_4068_BAD1_9B2B6BAD7C3B */
