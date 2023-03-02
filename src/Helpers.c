@@ -26,18 +26,10 @@ int croundf(double complex *z, double delta)
     double im = cimag(*z);
     double re2 = (double)4.4408920985006262e-16;
 
-    // if((creal(*z) < 0.0) && (creal(*z) > (-1.*abs(delta)))){
-    //     *z -= creal(*z);
-    // }else if ((creal(*z) > 0.0) && (creal(*z) < abs(delta))){
-    //     *z -= creal(*z);
-    // }
-
     if((creal(*z) < 0.0) && (creal(*z) > (-1.*fabs(delta)))){
         *z -= creal(*z);
-    }else if ((creal(*z) > 0.0) ){
-        if((creal(*z) < fabs(delta))){
-            *z -= creal(*z);
-        }
+    }else if ((creal(*z) > 0.0) && (creal(*z) < fabs(delta))){
+        *z -= creal(*z);
     }
 
     if((cimag(*z) < 0.0) && (cimag(*z) > (-1.*fabs(delta)))){

@@ -40,6 +40,13 @@ def plotDecomposition(data, outpath):
                   )
     minimum = math.floor(min(y))*1.1
     maximum = math.ceil(max(y))*1.1
+    if minimum == maximum:
+        if minimum == 0:
+            minimum = -1.
+            maximum = 1.
+        else:
+            minimum *= 0.8
+            maximum *= 1.2
     axs[0,1].set_ylim(minimum, maximum)
     axs[0,1].set_xlabel('Frequency Component')
     axs[0,1].set_ylabel('Real part')
@@ -55,6 +62,13 @@ def plotDecomposition(data, outpath):
                   )
     minimum = math.floor(min(y))*1.1
     maximum = math.ceil(max(y))*1.1
+    if minimum == maximum:
+        if minimum == 0:
+            minimum = -1.
+            maximum = 1.
+        else:
+            minimum *= 0.8
+            maximum *= 1.2
     axs[1,1].set_ylim(minimum, maximum)
     axs[1,1].set_xlabel('Frequency Component')
     axs[1,1].set_ylabel('Imaginary part')
@@ -70,6 +84,13 @@ def plotDecomposition(data, outpath):
                   )
     minimum = math.floor(min(y))*1.1
     maximum = math.ceil(max(y))*1.1
+    if minimum == maximum:
+        if minimum == 0:
+            minimum = -1.
+            maximum = 1.
+        else:
+            minimum *= 0.8
+            maximum *= 1.2
     axs[0,0].set_ylim(minimum, maximum)
     axs[0,0].set_xlabel('Frequency Component')
     axs[0,0].set_ylabel('Magnitude')
@@ -86,6 +107,13 @@ def plotDecomposition(data, outpath):
                   )
     minimum = min(y)*1.1
     maximum = max(y)*1.1
+    if minimum == maximum:
+        if minimum == 0:
+            minimum = -1.
+            maximum = 1.
+        else:
+            minimum *= 0.8
+            maximum *= 1.2
     axs[1,0].set_ylim(minimum, maximum)
     axs[1,0].set_xlabel('Frequency Component')
     axs[1,0].set_ylabel('Phase in rad')
