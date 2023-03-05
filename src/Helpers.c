@@ -13,10 +13,10 @@ float DSPPG__Helpers__genRand(float max)
 }
 
 
-int croundf(double complex *z, double delta)
+int cround(double complex *z, double delta)
 {
     int err = 0;
-    if(!*z){
+    if(!z){
         err = EFAULT;
         log_error("%s %d", __FUNCTION__, err);
         return err;

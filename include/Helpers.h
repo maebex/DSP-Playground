@@ -30,7 +30,7 @@ float DSPPG__Helpers__genRand(float max);
  * @return 
  *
 */
-int croundf(double complex *z, double delta);
+int cround(double complex *z, double delta);
 
 
 

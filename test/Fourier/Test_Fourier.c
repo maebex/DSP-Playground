@@ -13,7 +13,7 @@
 
 
 /* TEST 1 - sin(2*Pi*1Hz) */
-DSPPG_DigSignal_TD_t sigStump_1;
+DSPPG_Signal_t sigStump_1;
 #define TEST_1_ARRAY_LENGTH 8
 #define TEST_1_SAMPLE_RATE 8 // Hz
 #define TEST_1_OFFSET 0.0
@@ -31,7 +31,7 @@ float TEST_1_ARRAY[TEST_1_ARRAY_LENGTH] = {
 
 
 /* TEST 2 - sin(2*PI*1Hz)+0.5*sin/(2*PI*2Hz+(3*Pi/4)) */
-DSPPG_DigSignal_TD_t sigStump_2;
+DSPPG_Signal_t sigStump_2;
 #define TEST_2_ARRAY_LENGTH 8
 #define TEST_2_SAMPLE_RATE 8 // Hz
 #define TEST_2_OFFSET 0.0
@@ -52,7 +52,7 @@ float TEST_2_ARRAY[TEST_2_ARRAY_LENGTH] = {
 
 
 /* TEST 3 - 3+sin(2*Pi*1Hz) */
-DSPPG_DigSignal_TD_t sigStump_3;
+DSPPG_Signal_t sigStump_3;
 #define TEST_3_ARRAY_LENGTH 8
 #define TEST_3_SAMPLE_RATE 8 // Hz
 #define TEST_3_OFFSET 3.0
@@ -69,7 +69,7 @@ float TEST_3_ARRAY[TEST_3_ARRAY_LENGTH] = {
 
 
 /* TEST 4 - Example 2 by 3 samples  */
-DSPPG_DigSignal_TD_t sigStump_4;
+DSPPG_Signal_t sigStump_4;
 #define TEST_4_ARRAY_LENGTH 8
 #define TEST_4_SAMPLE_RATE 8 // Hz
 #define TEST_4_OFFSET 0.0
@@ -90,7 +90,7 @@ float TEST_4_ARRAY[TEST_4_ARRAY_LENGTH] = {
 
 
 /* TEST 5 - Rectangular window */
-DSPPG_DigSignal_TD_t sigStump_5;
+DSPPG_Signal_t sigStump_5;
 #define TEST_5_ARRAY_LENGTH 64
 #define TEST_5_SAMPLE_RATE 8 // Hz
 float TEST_5_ARRAY[TEST_5_ARRAY_LENGTH] = {0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 
@@ -103,7 +103,7 @@ float TEST_5_ARRAY[TEST_5_ARRAY_LENGTH] = {0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.
                                            0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0};
 
 /* TEST 6 - IDFT */
-DSPPG_DigSignal_TD_t sigStump_6;
+DSPPG_Signal_t sigStump_6;
 #define TEST_6_ARRAY_LENGTH 28
 #define TEST_6_SAMPLE_RATE 8 // Hz
 float TEST_6_ARRAY[TEST_6_ARRAY_LENGTH] = {1.0, 
@@ -113,28 +113,28 @@ float TEST_6_ARRAY[TEST_6_ARRAY_LENGTH] = {1.0,
 
 
 /* TEST 7 */
-DSPPG_DigSignal_TD_t sigStump_7;
+DSPPG_Signal_t sigStump_7;
 #define TEST_7_ARRAY_LENGTH 9
 #define TEST_7_SAMPLE_RATE 8 // Hz
 float TEST_7_ARRAY[TEST_7_ARRAY_LENGTH] = {9.0, 9.0, 9.0, 9.0, 9.0, 9.0, 9.0, 9.0, 9.0};
 
 
 /* TEST 8 */
-DSPPG_DigSignal_TD_t sigStump_8;
+DSPPG_Signal_t sigStump_8;
 #define TEST_8_ARRAY_LENGTH 9
 #define TEST_8_SAMPLE_RATE 8 // Hz
 float TEST_8_ARRAY[TEST_8_ARRAY_LENGTH] = {1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0};
 
 
 /* TEST 9 */
-DSPPG_DigSignal_TD_t sigStump_9;
+DSPPG_Signal_t sigStump_9;
 #define TEST_9_ARRAY_LENGTH 9
 #define TEST_9_SAMPLE_RATE 8 // Hz
 float TEST_9_ARRAY[TEST_9_ARRAY_LENGTH] = {0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0};
 
 
 /* TEST 10 */
-DSPPG_DigSignal_FD_t specStump_10;
+DSPPG_Spectrum_t specStump_10;
 #define TEST_10_ARRAY_LENGTH 9
 #define TEST_10_SAMPLE_RATE 8 // Hz
 double TEST_10_ARRAY_RE[TEST_10_ARRAY_LENGTH] = {0.0, 0.0, 0.0, 5.657, 0.0, 5.657, 0.0, 0.0, 0.0};
@@ -145,34 +145,34 @@ void setUp(void)
 {
     int err;
     
-    err = DSPPG__Signals__DigSignal__setData(&sigStump_1, TEST_1_ARRAY_LENGTH, TEST_1_ARRAY, NULL);
+    err = DSPPG__Signals__Signal__setData(&sigStump_1, TEST_1_ARRAY_LENGTH, TEST_1_ARRAY, NULL);
     TEST_ASSERT_EQUAL_INT(0, err);
 
-    err = DSPPG__Signals__DigSignal__setData(&sigStump_2, TEST_2_ARRAY_LENGTH, TEST_2_ARRAY, NULL);
+    err = DSPPG__Signals__Signal__setData(&sigStump_2, TEST_2_ARRAY_LENGTH, TEST_2_ARRAY, NULL);
     TEST_ASSERT_EQUAL_INT(0, err);
 
-    err = DSPPG__Signals__DigSignal__setData(&sigStump_3, TEST_3_ARRAY_LENGTH, TEST_3_ARRAY, NULL);
+    err = DSPPG__Signals__Signal__setData(&sigStump_3, TEST_3_ARRAY_LENGTH, TEST_3_ARRAY, NULL);
     TEST_ASSERT_EQUAL_INT(0, err);
 
-    err = DSPPG__Signals__DigSignal__setData(&sigStump_4, TEST_4_ARRAY_LENGTH, TEST_4_ARRAY, NULL);
+    err = DSPPG__Signals__Signal__setData(&sigStump_4, TEST_4_ARRAY_LENGTH, TEST_4_ARRAY, NULL);
     TEST_ASSERT_EQUAL_INT(0, err);
 
-    err = DSPPG__Signals__DigSignal__setData(&sigStump_5, TEST_5_ARRAY_LENGTH, TEST_5_ARRAY, NULL);
+    err = DSPPG__Signals__Signal__setData(&sigStump_5, TEST_5_ARRAY_LENGTH, TEST_5_ARRAY, NULL);
     TEST_ASSERT_EQUAL_INT(0, err);
 
-    err = DSPPG__Signals__DigSignal__setData(&sigStump_6, TEST_6_ARRAY_LENGTH, TEST_6_ARRAY, NULL);
+    err = DSPPG__Signals__Signal__setData(&sigStump_6, TEST_6_ARRAY_LENGTH, TEST_6_ARRAY, NULL);
     TEST_ASSERT_EQUAL_INT(0, err);
 
-    err = DSPPG__Signals__DigSignal__setData(&sigStump_7, TEST_7_ARRAY_LENGTH, TEST_7_ARRAY, NULL);
+    err = DSPPG__Signals__Signal__setData(&sigStump_7, TEST_7_ARRAY_LENGTH, TEST_7_ARRAY, NULL);
     TEST_ASSERT_EQUAL_INT(0, err);
 
-    err = DSPPG__Signals__DigSignal__setData(&sigStump_8, TEST_8_ARRAY_LENGTH, TEST_8_ARRAY, NULL);
+    err = DSPPG__Signals__Signal__setData(&sigStump_8, TEST_8_ARRAY_LENGTH, TEST_8_ARRAY, NULL);
     TEST_ASSERT_EQUAL_INT(0, err);
 
-    err = DSPPG__Signals__DigSignal__setData(&sigStump_9, TEST_9_ARRAY_LENGTH, TEST_9_ARRAY, NULL);
+    err = DSPPG__Signals__Signal__setData(&sigStump_9, TEST_9_ARRAY_LENGTH, TEST_9_ARRAY, NULL);
     TEST_ASSERT_EQUAL_INT(0, err);
 
-    err = DSPPG__Fourier__realDFT__setData(&specStump_10, TEST_10_ARRAY_LENGTH, TEST_10_ARRAY_RE, TEST_10_ARRAY_IM);
+    err = DSPPG__Signals__Spectrum__setData(&specStump_10, TEST_10_ARRAY_LENGTH, TEST_10_ARRAY_RE, TEST_10_ARRAY_IM);
     TEST_ASSERT_EQUAL_INT(0, err);
 
 
@@ -187,12 +187,12 @@ void tearDown(void)
 void DSPPG__Fourier__realDFT__analyze__1(void)
 {
     int err;
-    DSPPG_DigSignal_FD_t decomp;
+    DSPPG_Spectrum_t decomp;
     err = DSPPG__Fourier__realDFT__analyze(&decomp, &sigStump_1, TEST_1_SAMPLE_RATE);
     TEST_ASSERT_EQUAL_INT(0, err);
     #ifdef STORE_RESULTS_TEST_1
-    DSPPG__Signals__DigSignal__toJSON(&sigStump_1, TEST_DATA_FILE_STORAGE_PATH);
-    DSPPG__Fourier__realDFT__toJSON(&decomp, TEST_DATA_FILE_STORAGE_PATH);
+    DSPPG__Signals__Signal__toJSON(&sigStump_1, TEST_DATA_FILE_STORAGE_PATH);
+    DSPPG__Signals__Spectrum__toJSON(&decomp, TEST_DATA_FILE_STORAGE_PATH);
     #endif /* STORE_RESULTS_TEST_1 */
     err = DSPPG__Fourier__realDFT__destroy(&decomp);
     TEST_ASSERT_EQUAL_INT(0, err);
@@ -202,12 +202,12 @@ void DSPPG__Fourier__realDFT__analyze__1(void)
 void DSPPG__Fourier__realDFT__analyze__2(void)
 {
     int err;
-    DSPPG_DigSignal_FD_t decomp;
+    DSPPG_Spectrum_t decomp;
     err = DSPPG__Fourier__realDFT__analyze(&decomp, &sigStump_2, TEST_2_SAMPLE_RATE);
     TEST_ASSERT_EQUAL_INT(0, err);
     #ifdef STORE_RESULTS_TEST_2
-    DSPPG__Signals__DigSignal__toJSON(&sigStump_2, TEST_DATA_FILE_STORAGE_PATH);
-    DSPPG__Fourier__realDFT__toJSON(&decomp, TEST_DATA_FILE_STORAGE_PATH);
+    DSPPG__Signals__Signal__toJSON(&sigStump_2, TEST_DATA_FILE_STORAGE_PATH);
+    DSPPG__Signals__Spectrum__toJSON(&decomp, TEST_DATA_FILE_STORAGE_PATH);
     #endif /* STORE_RESULTS_TEST_2 */
     err = DSPPG__Fourier__realDFT__destroy(&decomp);
     TEST_ASSERT_EQUAL_INT(0, err);
@@ -216,12 +216,12 @@ void DSPPG__Fourier__realDFT__analyze__2(void)
 void DSPPG__Fourier__realDFT__analyze__3(void)
 {
     int err;
-    DSPPG_DigSignal_FD_t decomp;
+    DSPPG_Spectrum_t decomp;
     err = DSPPG__Fourier__realDFT__analyze(&decomp, &sigStump_3, TEST_3_SAMPLE_RATE);
     TEST_ASSERT_EQUAL_INT(0, err);
     #ifdef STORE_RESULTS_TEST_3
-    DSPPG__Signals__DigSignal__toJSON(&sigStump_3, TEST_DATA_FILE_STORAGE_PATH);
-    DSPPG__Fourier__realDFT__toJSON(&decomp, TEST_DATA_FILE_STORAGE_PATH);
+    DSPPG__Signals__Signal__toJSON(&sigStump_3, TEST_DATA_FILE_STORAGE_PATH);
+    DSPPG__Signals__Spectrum__toJSON(&decomp, TEST_DATA_FILE_STORAGE_PATH);
     #endif /* STORE_RESULTS_TEST_3 */
     err = DSPPG__Fourier__realDFT__destroy(&decomp);
     TEST_ASSERT_EQUAL_INT(0, err);
@@ -230,12 +230,12 @@ void DSPPG__Fourier__realDFT__analyze__3(void)
 void DSPPG__Fourier__realDFT__analyze__4(void)
 {
     int err;
-    DSPPG_DigSignal_FD_t decomp;
+    DSPPG_Spectrum_t decomp;
     err = DSPPG__Fourier__realDFT__analyze(&decomp, &sigStump_4, TEST_4_SAMPLE_RATE);
     TEST_ASSERT_EQUAL_INT(0, err);
     #ifdef STORE_RESULTS_TEST_4
-    DSPPG__Signals__DigSignal__toJSON(&sigStump_4, TEST_DATA_FILE_STORAGE_PATH);
-    DSPPG__Fourier__realDFT__toJSON(&decomp, TEST_DATA_FILE_STORAGE_PATH);
+    DSPPG__Signals__Signal__toJSON(&sigStump_4, TEST_DATA_FILE_STORAGE_PATH);
+    DSPPG__Signals__Spectrum__toJSON(&decomp, TEST_DATA_FILE_STORAGE_PATH);
     #endif /* STORE_RESULTS_TEST_4 */
     err = DSPPG__Fourier__realDFT__destroy(&decomp);
     TEST_ASSERT_EQUAL_INT(0, err);
@@ -246,12 +246,12 @@ void DSPPG__Fourier__realDFT__analyze__4(void)
 void DSPPG__Fourier__realDFT__analyze__5(void)
 {
     int err;
-    DSPPG_DigSignal_FD_t decomp;
+    DSPPG_Spectrum_t decomp;
     err = DSPPG__Fourier__realDFT__analyze(&decomp, &sigStump_5, TEST_5_SAMPLE_RATE);
     TEST_ASSERT_EQUAL_INT(0, err);
     #ifdef STORE_RESULTS_TEST_5
-    DSPPG__Signals__DigSignal__toJSON(&sigStump_5, TEST_DATA_FILE_STORAGE_PATH);
-    DSPPG__Fourier__realDFT__toJSON(&decomp, TEST_DATA_FILE_STORAGE_PATH);
+    DSPPG__Signals__Signal__toJSON(&sigStump_5, TEST_DATA_FILE_STORAGE_PATH);
+    DSPPG__Signals__Spectrum__toJSON(&decomp, TEST_DATA_FILE_STORAGE_PATH);
     #endif /* STORE_RESULTS_TEST_5 */
     err = DSPPG__Fourier__realDFT__destroy(&decomp);
     TEST_ASSERT_EQUAL_INT(0, err);
@@ -261,16 +261,16 @@ void DSPPG__Fourier__realDFT__analyze__5(void)
 void DSPPG__Fourier__realDFT__synthesize__6(void)
 {
     int err;
-    DSPPG_DigSignal_FD_t decomp;
+    DSPPG_Spectrum_t decomp;
     err = DSPPG__Fourier__realDFT__analyze(&decomp, &sigStump_6, TEST_6_SAMPLE_RATE);
     TEST_ASSERT_EQUAL_INT(0, err);
-    DSPPG_DigSignal_TD_t syntSig;
+    DSPPG_Signal_t syntSig;
     memset(&syntSig, 0, sizeof syntSig);
     err = DSPPG__Fourier__realDFT__synthesize(&syntSig, &decomp);
     TEST_ASSERT_EQUAL_INT(0, err);
     #ifdef STORE_RESULTS_TEST_6
-    DSPPG__Fourier__realDFT__toJSON(&decomp, TEST_DATA_FILE_STORAGE_PATH);
-    DSPPG__Signals__DigSignal__toJSON(&syntSig, TEST_DATA_FILE_STORAGE_PATH);
+    DSPPG__Signals__Spectrum__toJSON(&decomp, TEST_DATA_FILE_STORAGE_PATH);
+    DSPPG__Signals__Signal__toJSON(&syntSig, TEST_DATA_FILE_STORAGE_PATH);
     #endif /* STORE_RESULTS_TEST_6 */
     err = DSPPG__Fourier__realDFT__destroy(&decomp);
     TEST_ASSERT_EQUAL_INT(0, err);
@@ -279,12 +279,12 @@ void DSPPG__Fourier__realDFT__synthesize__6(void)
 void DSPPG__Fourier__realDFT__analyze__7(void)
 {
     int err;
-    DSPPG_DigSignal_FD_t decomp;
+    DSPPG_Spectrum_t decomp;
     err = DSPPG__Fourier__realDFT__analyze(&decomp, &sigStump_7, TEST_7_SAMPLE_RATE);
     TEST_ASSERT_EQUAL_INT(0, err);
     #ifdef STORE_RESULTS_TEST_7
-    DSPPG__Signals__DigSignal__toJSON(&sigStump_7, TEST_DATA_FILE_STORAGE_PATH);
-    DSPPG__Fourier__realDFT__toJSON(&decomp, TEST_DATA_FILE_STORAGE_PATH);
+    DSPPG__Signals__Signal__toJSON(&sigStump_7, TEST_DATA_FILE_STORAGE_PATH);
+    DSPPG__Signals__Spectrum__toJSON(&decomp, TEST_DATA_FILE_STORAGE_PATH);
     #endif /* STORE_RESULTS_TEST_7 */
     err = DSPPG__Fourier__realDFT__destroy(&decomp);
     TEST_ASSERT_EQUAL_INT(0, err);
@@ -293,12 +293,12 @@ void DSPPG__Fourier__realDFT__analyze__7(void)
 void DSPPG__Fourier__realDFT__analyze__8(void)
 {
     int err;
-    DSPPG_DigSignal_FD_t decomp;
+    DSPPG_Spectrum_t decomp;
     err = DSPPG__Fourier__realDFT__analyze(&decomp, &sigStump_8, TEST_8_SAMPLE_RATE);
     TEST_ASSERT_EQUAL_INT(0, err);
     #ifdef STORE_RESULTS_TEST_8
-    DSPPG__Signals__DigSignal__toJSON(&sigStump_8, TEST_DATA_FILE_STORAGE_PATH);
-    DSPPG__Fourier__realDFT__toJSON(&decomp, TEST_DATA_FILE_STORAGE_PATH);
+    DSPPG__Signals__Signal__toJSON(&sigStump_8, TEST_DATA_FILE_STORAGE_PATH);
+    DSPPG__Signals__Spectrum__toJSON(&decomp, TEST_DATA_FILE_STORAGE_PATH);
     #endif /* STORE_RESULTS_TEST_8 */
     err = DSPPG__Fourier__realDFT__destroy(&decomp);
     TEST_ASSERT_EQUAL_INT(0, err);
@@ -307,12 +307,12 @@ void DSPPG__Fourier__realDFT__analyze__8(void)
 void DSPPG__Fourier__realDFT__analyze__9(void)
 {
     int err;
-    DSPPG_DigSignal_FD_t decomp;
+    DSPPG_Spectrum_t decomp;
     err = DSPPG__Fourier__realDFT__analyze(&decomp, &sigStump_9, TEST_9_SAMPLE_RATE);
     TEST_ASSERT_EQUAL_INT(0, err);
     #ifdef STORE_RESULTS_TEST_9
-    DSPPG__Signals__DigSignal__toJSON(&sigStump_9, TEST_DATA_FILE_STORAGE_PATH);
-    DSPPG__Fourier__realDFT__toJSON(&decomp, TEST_DATA_FILE_STORAGE_PATH);
+    DSPPG__Signals__Signal__toJSON(&sigStump_9, TEST_DATA_FILE_STORAGE_PATH);
+    DSPPG__Signals__Spectrum__toJSON(&decomp, TEST_DATA_FILE_STORAGE_PATH);
     #endif /* STORE_RESULTS_TEST_9 */
     err = DSPPG__Fourier__realDFT__destroy(&decomp);
     TEST_ASSERT_EQUAL_INT(0, err);
@@ -324,13 +324,13 @@ void DSPPG__Fourier__realDFT__synthesize__10(void)
 {
     int err;
 
-    DSPPG_DigSignal_TD_t syntSig;
+    DSPPG_Signal_t syntSig;
     memset(&syntSig, 0, sizeof syntSig);
     err = DSPPG__Fourier__realDFT__synthesize(&syntSig, &specStump_10);
     TEST_ASSERT_EQUAL_INT(0, err);
     #ifdef STORE_RESULTS_TEST_10
-    DSPPG__Signals__DigSignal__toJSON(&syntSig, TEST_DATA_FILE_STORAGE_PATH);
-    DSPPG__Fourier__realDFT__toJSON(&specStump_10, TEST_DATA_FILE_STORAGE_PATH);
+    DSPPG__Signals__Signal__toJSON(&syntSig, TEST_DATA_FILE_STORAGE_PATH);
+    DSPPG__Signals__Spectrum__toJSON(&specStump_10, TEST_DATA_FILE_STORAGE_PATH);
     #endif /* STORE_RESULTS_TEST_10 */
     err = DSPPG__Fourier__realDFT__destroy(&specStump_10);
     TEST_ASSERT_EQUAL_INT(0, err);

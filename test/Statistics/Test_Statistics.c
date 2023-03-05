@@ -7,8 +7,8 @@
 
 #define TEST_ARRAY_LENGTH 5
 
-DSPPG_DigSignal_TD_t sigStump_fourVals;
-DSPPG_DigSignal_TD_t sigStump_fiveVals;
+DSPPG_Signal_t sigStump_fourVals;
+DSPPG_Signal_t sigStump_fiveVals;
 DSPPG_StatCont_t contStump_fourVals;
 DSPPG_StatCont_t contStump_fiveVals;
 float TEST_ARR[TEST_ARRAY_LENGTH] = {432519., 35893., -305., 234535., -359048.};

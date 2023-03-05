@@ -2,7 +2,7 @@
 #include <math.h>
 
 int DSPPG__Statistics__StatCont__setSignal(DSPPG_StatCont_t *cont,
-                                           DSPPG_DigSignal_TD_t * const sig)
+                                           DSPPG_Signal_t * const sig)
 {
     if(!cont){
         int err = EFAULT;
@@ -48,7 +48,7 @@ int DSPPG__Statistics__StatCont__updateMean(DSPPG_StatCont_t *cont,
 
     cont->mean *= cont->signal->len;
 
-    DSPPG_DigSignal_payloadType_t tmp = 0;
+    DSPPG_Signal_payloadType_t tmp = 0;
     for(int i=cont->signal->len; i<(cont->signal->len+n); i++){
         tmp += cont->signal->data[i];
     }
