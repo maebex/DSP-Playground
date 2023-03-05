@@ -9,7 +9,7 @@
 #define TEST_DATA_FILE_STORAGE_PATH "/mnt/c/Users/mbern/Desktop/gplot/"
 
 // Set this to adjust the test results that are stored
-#define STORE_RESULTS_TEST_10
+#define STORE_RESULTS_TEST_1
 
 
 /* TEST 1 - sin(2*Pi*1Hz) */
@@ -68,7 +68,7 @@ float TEST_3_ARRAY[TEST_3_ARRAY_LENGTH] = {
 };
 
 
-/* TEST 4 - Example 2 by 3 samples  */
+/* TEST 4 - Example 2 shifted by 3 samples  */
 DSPPG_Signal_t sigStump_4;
 #define TEST_4_ARRAY_LENGTH 8
 #define TEST_4_SAMPLE_RATE 8 // Hz
