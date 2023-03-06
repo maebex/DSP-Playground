@@ -6,7 +6,7 @@
 
 
 // Set this to adjust the directory where test results are stored
-#define TEST_DATA_FILE_STORAGE_PATH "/mnt/c/Users/mbern/Desktop/gplot/"
+#define TEST_DATA_FILE_STORAGE_PATH "/mnt/c/Users/mberndt/Desktop/gplot/"
 
 // Set this to adjust the test results that are stored
 #define STORE_RESULTS_TEST_1
@@ -15,10 +15,12 @@
 /* TEST 1 - sin(2*Pi*1Hz) */
 DSPPG_Signal_t sigStump_1;
 #define TEST_1_ARRAY_LENGTH 8
+#define TEST_1_PADDED_ZEROS 100
+#define TEST_1_FINAL_LENGTH (TEST_1_ARRAY_LENGTH+TEST_1_PADDED_ZEROS)
 #define TEST_1_SAMPLE_RATE 8 // Hz
 #define TEST_1_OFFSET 0.0
 #define TEST_1_FREQUENCY 1.0
-float TEST_1_ARRAY[TEST_1_ARRAY_LENGTH] = {
+float TEST_1_ARRAY[TEST_1_FINAL_LENGTH] = {
     TEST_1_OFFSET+sin(2.*M_PI*TEST_1_FREQUENCY*0./TEST_1_ARRAY_LENGTH),
     TEST_1_OFFSET+sin(2.*M_PI*TEST_1_FREQUENCY*1./TEST_1_ARRAY_LENGTH),
     TEST_1_OFFSET+sin(2.*M_PI*TEST_1_FREQUENCY*2./TEST_1_ARRAY_LENGTH),
@@ -27,6 +29,16 @@ float TEST_1_ARRAY[TEST_1_ARRAY_LENGTH] = {
     TEST_1_OFFSET+sin(2.*M_PI*TEST_1_FREQUENCY*5./TEST_1_ARRAY_LENGTH),
     TEST_1_OFFSET+sin(2.*M_PI*TEST_1_FREQUENCY*6./TEST_1_ARRAY_LENGTH),
     TEST_1_OFFSET+sin(2.*M_PI*TEST_1_FREQUENCY*7./TEST_1_ARRAY_LENGTH),
+    0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,
+    0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,
+    0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,
+    0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,
+    0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,
+    0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,
+    0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,
+    0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,
+    0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,
+    0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0
 };
 
 
@@ -104,12 +116,15 @@ float TEST_5_ARRAY[TEST_5_ARRAY_LENGTH] = {0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.
 
 /* TEST 6 - IDFT */
 DSPPG_Signal_t sigStump_6;
-#define TEST_6_ARRAY_LENGTH 28
+#define TEST_6_ARRAY_LENGTH 64
 #define TEST_6_SAMPLE_RATE 8 // Hz
-float TEST_6_ARRAY[TEST_6_ARRAY_LENGTH] = {1.0, 
+float TEST_6_ARRAY[TEST_6_ARRAY_LENGTH] = {0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 
                                            0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 
                                            0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 
-                                           0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0};
+                                           0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 
+                                           0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 
+                                           0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,
+                                           0.0, 0.0, 0.0, 0.0};
 
 
 /* TEST 7 */
@@ -145,7 +160,7 @@ void setUp(void)
 {
     int err;
     
-    err = DSPPG__Signals__Signal__setData(&sigStump_1, TEST_1_ARRAY_LENGTH, TEST_1_ARRAY, NULL);
+    err = DSPPG__Signals__Signal__setData(&sigStump_1, TEST_1_FINAL_LENGTH, TEST_1_ARRAY, NULL);
     TEST_ASSERT_EQUAL_INT(0, err);
 
     err = DSPPG__Signals__Signal__setData(&sigStump_2, TEST_2_ARRAY_LENGTH, TEST_2_ARRAY, NULL);
